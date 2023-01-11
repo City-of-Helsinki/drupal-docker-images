@@ -192,7 +192,7 @@ RUN { \
   echo 'extension = "newrelic.so"'; \
     echo '[newrelic]'; \
     echo 'newrelic.enabled = true'; \
-    echo 'newrelic.license = "REPLACE_WITH_REAL_KEY"'; \
+    echo 'newrelic.license = "${NEW_RELIC_LICENSE_KEY}"'; \
     echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
     echo 'newrelic.appname = "PHP Application"'; \
     echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
