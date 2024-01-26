@@ -135,11 +135,43 @@ RUN set -eux; \
     ln -sfn /usr/bin/php82 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
 
+FROM php as php83
+RUN set -eux; \
+    apk --no-cache add \
+    php83-pear \
+    php83-fpm \
+    php83-curl \
+    php83-fileinfo \
+    php83-iconv \
+    php83-mbstring \
+    php83-opcache \
+    php83-openssl \
+    php83-phar \
+    php83-session \
+    php83-zip \
+    php83-dom \
+    php83-pdo \
+    php83-pdo_mysql \
+    php83-tokenizer \
+    php83-xmlreader \
+    php83-xmlwriter \
+    php83-simplexml \
+    php83-ctype \
+    php83-gd \
+    php83-sodium \
+    php83-pecl-apcu \
+    php83-pecl-redis; \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
+    php83-pecl-imagick; \
+    ln -sfn /usr/bin/php83 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm83 /usr/bin/php-fpm;
+
 FROM php${PHP_SHORT_VERSION} as final
 
-ENV NEW_RELIC_SHA256SUM 4c56258ce966d0e53fddfdaf765c0574a6f64f0c91a9c229108b98fbf37c8213
+ENV NEW_RELIC_SHA256SUM d50b763b5f24d1bfb63e83e346b9c2c4b007e58290f03f190cbee211ce529124
+ENV NEW_RELIC_URL https://download.newrelic.com/php_agent/archive/10.16.0.5/newrelic-php5-10.16.0.5-linux-musl.tar.gz
 RUN set -eux; \
-  curl https://download.newrelic.com/php_agent/archive/10.8.0.323/newrelic-php5-10.8.0.323-linux-musl.tar.gz > newrelic-php.tar.gz && \
+  curl $NEW_RELIC_URL > newrelic-php.tar.gz && \
   echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
   gzip -dc newrelic-php.tar.gz | tar xf - && \
   rm newrelic-php.tar.gz && \
