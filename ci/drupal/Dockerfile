@@ -98,8 +98,6 @@ ENV SIMPLETEST_BASE_URL=http://127.0.0.1:8888
 ENV SIMPLETEST_DB=mysql://drupal:drupal@db:3306/drupal
 ENV COMPOSER_HOME=/tmp/.composer
 
-# This environment variable is used by drush pm:security command.
-ENV DRUSH_SECURITY_ADVISORIES_URL=https://raw.githubusercontent.com/tuutti/drupal-security-advisories/9.x/composer.json
 # Individual module tests use `composer config repositories N $GITHUB_WORKSPACE && composer require drupal/$MODULE_NAME` to
 # symlink module's codebase from $GITHUB_WORKSPACE to public/modules/contrib folder. PHPUnit seems to report an incorrect
 # test coverage if the test folder is a symlink.

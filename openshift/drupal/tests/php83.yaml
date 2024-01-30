@@ -1,14 +1,15 @@
+
 schemaVersion: '2.0.0'
 commandTests:
   - name: 'PHP version'
     command: php
     args: ['--version']
-    expectedOutput: ['PHP 8.1.*']
+    expectedOutput: ['PHP 8.3.*']
 
   - name: 'PHP version'
     command: php-fpm
     args: ['--version']
-    expectedOutput: ['PHP 8.1.*']
+    expectedOutput: ['PHP 8.3.*']
 
   - name: 'Alpine version'
     command: cat

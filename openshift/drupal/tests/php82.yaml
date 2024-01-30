@@ -9,3 +9,8 @@ commandTests:
     command: php-fpm
     args: ['--version']
     expectedOutput: ['PHP 8.2.*']
+
+  - name: 'Alpine version'
+    command: cat
+    args: ['/etc/alpine-release']
+    expectedOutput: ['3.19.*']

@@ -46,8 +46,6 @@ metadataTest:
   envVars:
     - key: 'COMPOSER_HOME'
       value: '/tmp/.composer'
-    - key: 'DRUSH_SECURITY_ADVISORIES_URL'
-      value: 'https://raw.githubusercontent.com/tuutti/drupal-security-advisories/9.x/composer.json'
     - key: 'SIMPLETEST_DB'
       value: 'mysql://drupal:drupal@db:3306/drupal'
     - key: 'SIMPLETEST_BASE_URL'
