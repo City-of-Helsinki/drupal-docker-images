@@ -14,7 +14,9 @@ RUN apk add --no-cache \
     bash \
     jq \
     gnupg \
-    coreutils
+    coreutils \
+    # This is required by MySQL 8 (caching_sha2_password plugin)
+    mariadb-connector-c
 
 # install the PHP extensions we need
 RUN set -eux; \
