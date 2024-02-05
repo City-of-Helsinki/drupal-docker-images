@@ -4,7 +4,9 @@ FROM druidfi/drupal-web:php-${PHP_VERSION} as base
 
 COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/oc
 
-RUN sudo apk add --no-cache jq
+RUN sudo apk add --no-cache jq \
+  # This is required by mysql 8 (caching_sha2_password)
+  mariadb-connector-c
 
 # Autostart drush server and syslog services.
 COPY entrypoints/ /entrypoints
