@@ -41,7 +41,7 @@ PHONY += push-php
 push-php: push-php81 push-php82 push-php83
 
 define run_image
-	docker buildx build --load --platform $(1) --target=$(2) -t $(REPOSITORY):$(3) --build-arg PHP_VERSION=$(3) PHP_SHORT_VERSION=$(4) ./
+	docker buildx build --load --platform $(1) --target=$(2) -t $(REPOSITORY):$(3) --build-arg PHP_VERSION=$(3) --build-arg PHP_SHORT_VERSION=$(4) ./
 endef
 
 define push_image
