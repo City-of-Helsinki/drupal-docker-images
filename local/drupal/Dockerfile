@@ -18,6 +18,10 @@ COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 
 RUN grep -qxF 'xdebug.log' /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini || echo 'xdebug.log=/tmp/xdebug.log' | sudo tee -a /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini
 
+# Add druid user to nginx group to prevent permission issues with drush and 'asset://'
+# files.
+RUN sudo addgroup druid nginx
+
 FROM base as php81
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
