@@ -22,6 +22,8 @@ RUN grep -qxF 'xdebug.log' /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini || ech
 # files.
 RUN sudo addgroup druid nginx
 
+ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}"
+
 FROM base as php81
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
