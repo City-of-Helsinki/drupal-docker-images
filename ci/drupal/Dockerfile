@@ -12,6 +12,7 @@ RUN apk add --no-cache \
     # 'make cast-spell' has dependency to bash
     make \
     bash \
+    grep \
     jq \
     gnupg \
     coreutils \
