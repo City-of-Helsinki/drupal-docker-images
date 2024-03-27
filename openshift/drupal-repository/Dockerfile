@@ -2,7 +2,7 @@ FROM alpine:3.19
 COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 
 # We need php and git to build satis.
-RUN apk add --no-cache git php82 php82-openssl php82-common php82-json php82-phar php82-mbstring php82-pecl-apcu php82-zip php82-simplexml make
+RUN apk add --no-cache git php82 php82-openssl php82-common php82-json php82-phar php82-mbstring php82-pecl-apcu php82-zip php82-simplexml make tini
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
@@ -15,5 +15,12 @@ RUN \
 WORKDIR     /etc/webhook
 VOLUME      ["/etc/webhook"]
 EXPOSE      9000
-ENTRYPOINT  ["/usr/local/bin/webhook"]
-CMD ["-verbose", "-hooks=/etc/webhook/hooks.json", "-template", "-hotreload", "-debug"]
+
+# Copy configuration files and scripts
+COPY files/ /
+RUN chmod +x /entrypoints/* && \
+  chmod +x /usr/local/bin/entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Default command: Start up multiple services via entrypoint
+CMD ["entrypoint"]
