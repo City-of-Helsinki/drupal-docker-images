@@ -4,16 +4,11 @@ ifeq ($(TAG),)
 	TAG = latest
 endif
 
-.PHONY: build push release
+.PHONY: push release
 
-default: build
-
-run:
-	docker run -it --rm -u 100000 $(REPOSITORY):$(TAG) /bin/sh
-build:
-	docker build -t $(REPOSITORY):$(TAG) ./
+default: push
 
 push:
-	docker push $(REPOSITORY):$(TAG)
+	docker buildx build --pull --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./ --push
 
 release: build push
