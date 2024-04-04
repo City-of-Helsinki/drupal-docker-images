@@ -15,8 +15,8 @@ See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/ma
 - `SIMPLETEST_DB=mysql://drupal:drupal@db:3306/drupal`
 - `SIMPLETEST_BASE_URL=http://127.0.0.1:8888`
 - `COMPOSER_HOME=/tmp/.composer`: The composer home is overridden to mitigate permission issues
-- `DRUSH_SECURITY_ADVISORIES_URL`: This is used by `drush pm:security` command to scan project for security updates
 - `COMPOSER_MIRROR_PATH_REPOS=1`: Individual module tests use `composer config repositories N $GITHUB_WORKSPACE && composer require drupal/$MODULE_NAME` to symlink module's codebase from $GITHUB_WORKSPACE to public/modules/contrib folder. PHPUnit seems to sometimes report an incorrect test coverage if the test folder is a symlink. This setting changes composer to mirror the content instead of symlinking it. See https://helsinkisolutionoffice.atlassian.net/browse/UHF-8566
+- `COMPOSER_DISCARD_CHANGES=true`: Automatically discard uncommitted changes
 
 ## Development
 
