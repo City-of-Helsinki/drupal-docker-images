@@ -1,7 +1,9 @@
 # OpenShift Drupal base images
 
-Supported PHP versions: `8.2`, `8.1`:
+Supported PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3-dev`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.2-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.2`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1-dev`

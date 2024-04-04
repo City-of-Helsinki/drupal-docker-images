@@ -1,7 +1,8 @@
 # Drupal CI image
 
-Available PHP versions: `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-php-docker:8.3-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
 

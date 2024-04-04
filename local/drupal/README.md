@@ -6,8 +6,9 @@ Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with few
 - Force HTTPS nginx fastcgi parameter `on` to make sure Drupal generates URLs using `https`
 - Run php-fpm and nginx as same user to prevent some weird permission issues
 
-Available PHP versions: `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-web:8.3`
 - `ghcr.io/city-of-helsinki/drupal-web:8.2`
 - `ghcr.io/city-of-helsinki/drupal-web:8.1`
 
