@@ -14,8 +14,9 @@ See:
 - [City-of-Helsinki/drupal-helfi-platform/documentation/openshift.md](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/documentation/openshift.md) for documentation on how to use this image in your own project.
 - [openshift/drupal/README.md](openshift/drupal/README.md) for developer documentation.
 
-Available PHP versions: `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.2`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.1`
 
@@ -25,8 +26,9 @@ Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with som
 
 See [local/drupal/README.md](local/drupal/README.md) for documentation.
 
-Available PHP versions: `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-web:8.3`
 - `ghcr.io/city-of-helsinki/drupal-web:8.2`
 - `ghcr.io/city-of-helsinki/drupal-web:8.1`
 
@@ -37,8 +39,9 @@ Contains Docker images for testing Drupal.
 See:
 - [ci/drupal](ci/drupal) for more documentation about Drupal CI image.
 
-Available PHP versions: `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.2`, `8.1`:
 
+- `ghcr.io/city-of-helsinki/drupal-php-docker:8.3-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
 

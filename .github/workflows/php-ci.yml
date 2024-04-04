@@ -1,11 +1,13 @@
 on:
   pull_request:
     paths:
+      - '!**.md'
       - 'ci/drupal/**'
       - '.github/workflows/php-ci.yml'
   push:
     branches: [ main ]
     paths:
+      - '!**.md'
       - 'ci/drupal/**'
       - '.github/workflows/php-ci.yml'
 jobs:
