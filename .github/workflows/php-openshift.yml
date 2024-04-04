@@ -1,11 +1,13 @@
 on:
   pull_request:
     paths:
+      - '!**.md'
       - 'openshift/drupal/**'
       - '.github/workflows/php-openshift.yml'
   push:
     branches: [ main ]
     paths:
+      - '!**.md'
       - 'openshift/drupal/**'
       - '.github/workflows/php-openshift.yml'
 jobs:
