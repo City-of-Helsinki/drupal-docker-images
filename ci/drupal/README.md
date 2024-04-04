@@ -6,9 +6,11 @@ Available PHP versions: `8.3`, `8.2`, `8.1`:
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.2-alpine`
 - `ghcr.io/city-of-helsinki/drupal-php-docker:8.1-alpine`
 
-All images should include all packages necessary to run all Drupal tests (including FunctionalJavascript tests using `chromium-driver`).
+All images should include all packages necessary to run all Drupal tests.
 
-See [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/.github/workflows/test.yml.dist) for an example how to run tests using this image.
+See:
+- [test.yml](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/.github/workflows/test.yml.dist) for an example how to run tests using this image.
+- [Automated testing documentation](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/documentation/testing.md)
 
 ## Environment variables
 
