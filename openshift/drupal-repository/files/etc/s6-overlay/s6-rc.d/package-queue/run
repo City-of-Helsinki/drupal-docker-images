@@ -1,4 +1,0 @@
-#!/command/with-contenv sh
-cd $PROJECT_DIR
-make
-exec php console.php queue:consume package-queue --item-limit 10;
