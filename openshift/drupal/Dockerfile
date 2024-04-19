@@ -57,10 +57,7 @@ RUN \
   # Correct permissions to nginx folders.
   chmod -R a+rwx /var/lib/nginx && \
   chmod -R a+rwx /var/log/nginx && \
-  chmod -R a+rwx /etc/nginx/conf.d && \
-  # Redirect log output to docker log collector.
-  ln -sf /proc/1/fd/1 /var/log/nginx/access.log && \
-  ln -sf /proc/1/fd/2 /var/log/nginx/error.log
+  chmod -R a+rwx /etc/nginx/conf.d
 
 # Expose nginx
 EXPOSE 8080
@@ -168,35 +165,7 @@ RUN set -eux; \
 
 FROM php${PHP_SHORT_VERSION} as final
 
-ENV NEW_RELIC_SHA256SUM d50b763b5f24d1bfb63e83e346b9c2c4b007e58290f03f190cbee211ce529124
-ENV NEW_RELIC_URL https://download.newrelic.com/php_agent/archive/10.16.0.5/newrelic-php5-10.16.0.5-linux-musl.tar.gz
-RUN set -eux; \
-  curl $NEW_RELIC_URL > newrelic-php.tar.gz && \
-  echo "$NEW_RELIC_SHA256SUM *newrelic-php.tar.gz" | sha256sum -c - && \
-  gzip -dc newrelic-php.tar.gz | tar xf - && \
-  rm newrelic-php.tar.gz && \
-  cd newrelic-php* && \
-  NR_INSTALL_SILENT=true NR_INSTALL_USE_CP_NOT_LN=1 ./newrelic-install install && \
-  cd .. && \
-  rm -rf newrelic-php* && \
-  rm -r /tmp/*
-
-RUN touch /tmp/php_agent.log /tmp/newrelic-daemon.log && \
-  chmod a+rw /tmp/php_agent.log /tmp/newrelic-daemon.log;
-
 ARG PHP_SHORT_VERSION
-
-# Newrelic configuration.
-RUN { \
-    echo 'extension = "newrelic.so"'; \
-    echo '[newrelic]'; \
-    echo 'newrelic.enabled = true'; \
-    echo 'newrelic.logfile = "/tmp/php_agent.log"'; \
-    echo 'newrelic.daemon.logfile = "/tmp/newrelic-daemon.log"'; \
-    echo 'newrelic.license = "${NEW_RELIC_LICENSE_KEY}"'; \
-    echo 'newrelic.appname = "${NEW_RELIC_APPNAME}"'; \
-    echo 'newrelic.daemon.address = "${NEW_RELIC_DAEMON_ADDRESS}"'; \
-} > /etc/php${PHP_SHORT_VERSION}/conf.d/newrelic.ini
 
 # Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
