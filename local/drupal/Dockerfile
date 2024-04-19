@@ -16,7 +16,9 @@ COPY files/ /
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 
-RUN grep -qxF 'xdebug.log' /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini || echo 'xdebug.log=/tmp/xdebug.log' | sudo tee -a /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini
+RUN grep -qxF 'xdebug.log' /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini || echo 'xdebug.log=/tmp/xdebug.log' | sudo tee -a /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini && \
+  sudo -u root touch /tmp/xdebug.log && \
+  sudo chmod 666 /tmp/xdebug.log
 
 # Add druid user to nginx group to prevent permission issues with drush and 'asset://'
 # files.
