@@ -41,4 +41,4 @@ FROM base as php83
 RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add php82-pecl-imagick php83-pecl-pcov
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add php83-pecl-imagick php83-pecl-pcov
