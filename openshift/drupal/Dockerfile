@@ -42,10 +42,6 @@ RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tm
 
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
-COPY drupal.conf /etc/nginx/http.d/default.conf
-COPY fastcgi.conf /etc/nginx/fastcgi.conf
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx-custom.locations /etc/nginx/conf.d/custom.locations
 
 RUN \
   # COMPOSER_HOME permissions.
