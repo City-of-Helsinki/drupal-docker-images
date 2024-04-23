@@ -40,6 +40,14 @@ RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tm
   cat /tmp/baltimore.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
   rm /tmp/*.crt.pem
 
+# Expose nginx
+EXPOSE 8080
+
+# Copy configuration files and scripts
+COPY files/ /
+RUN chmod +x /entrypoints/* && \
+  chmod +x /usr/local/bin/entrypoint
+
 # Create missing nginx folder.
 RUN mkdir -p /run/nginx
 
@@ -55,13 +63,6 @@ RUN \
   chmod -R a+rwx /var/log/nginx && \
   chmod -R a+rwx /etc/nginx/conf.d
 
-# Expose nginx
-EXPOSE 8080
-
-# Copy configuration files and scripts
-COPY files/ /
-RUN chmod +x /entrypoints/* && \
-  chmod +x /usr/local/bin/entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
 
 # Default command: Start up multiple services via entrypoint
