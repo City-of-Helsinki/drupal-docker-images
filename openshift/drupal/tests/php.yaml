@@ -9,8 +9,8 @@ commandTests:
     args:
       - -c
       - |
-        php -m | grep -e json -e apcu -e curl -e gd -e mbstring -e openssl -e pdo -e redis -e sodium -e "Zend OPcache" -e tokenizer -e xml -e SimpleXML -e ctype -e newrelic -e imagick | sort -uf
-    expectedOutput: ["apcu\nctype\ncurl\ngd\nimagick\njson\nlibxml\nmbstring\nnewrelic\nopenssl\npdo_mysql\nredis\nSimpleXML\nsodium\ntokenizer\nxml\nxmlreader\nxmlwriter\nZend OPcache"]
+        php -m | grep -e json -e apcu -e curl -e gd -e mbstring -e openssl -e pdo -e redis -e sodium -e "Zend OPcache" -e tokenizer -e xml -e SimpleXML -e ctype -e imagick | sort -uf
+    expectedOutput: ["apcu\nctype\ncurl\ngd\nimagick\njson\nlibxml\nmbstring\nopenssl\npdo_mysql\nredis\nSimpleXML\nsodium\ntokenizer\nxml\nxmlreader\nxmlwriter\nZend OPcache"]
   - name: 'Git is installed'
     command: which
     args: ['git']
