@@ -16,7 +16,7 @@ group "prod" {
 target "php" {
   target = "final"
   args = {
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
 }
 
@@ -25,7 +25,7 @@ target "php83-dev" {
   args = {
     PHP_VERSION = "8.3"
     PHP_SHORT_VERSION = "83"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3-dev"]
   platforms = ["linux/amd64"]
@@ -36,7 +36,7 @@ target "php83" {
   args = {
     PHP_VERSION = "8.3"
     PHP_SHORT_VERSION = "83"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3"]
   platforms = ["linux/amd64"]
@@ -47,7 +47,7 @@ target "php82-dev" {
   args = {
     PHP_VERSION = "8.2"
     PHP_SHORT_VERSION = "82"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.2-dev"]
   platforms = ["linux/amd64"]
@@ -58,7 +58,7 @@ target "php82" {
   args = {
     PHP_VERSION = "8.2"
     PHP_SHORT_VERSION = "82"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.2"]
   platforms = ["linux/amd64"]
@@ -69,7 +69,7 @@ target "php81-dev" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.1-dev"]
   platforms = ["linux/amd64"]
@@ -80,7 +80,7 @@ target "php81" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
+    ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.1"]
   platforms = ["linux/amd64"]
