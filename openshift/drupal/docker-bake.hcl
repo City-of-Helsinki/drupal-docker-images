@@ -69,7 +69,7 @@ target "php81-dev" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.19"
   }
   tags = ["${REPO_BASE}:8.1-dev"]
   platforms = ["linux/amd64"]
@@ -80,7 +80,7 @@ target "php81" {
   args = {
     PHP_VERSION = "8.1"
     PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.19"
   }
   tags = ["${REPO_BASE}:8.1"]
   platforms = ["linux/amd64"]
