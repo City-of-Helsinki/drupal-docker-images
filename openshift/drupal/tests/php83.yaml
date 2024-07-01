@@ -14,4 +14,4 @@ commandTests:
   - name: 'Alpine version'
     command: cat
     args: ['/etc/alpine-release']
-    expectedOutput: ['3.19.*']
+    expectedOutput: ['3.20.*']

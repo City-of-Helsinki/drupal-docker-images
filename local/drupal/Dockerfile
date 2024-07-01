@@ -6,6 +6,8 @@ COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/o
 
 RUN sudo apk add --no-cache jq
 
+RUN sudo composer self-update
+
 # Autostart drush server and syslog services.
 COPY entrypoints/ /entrypoints
 
