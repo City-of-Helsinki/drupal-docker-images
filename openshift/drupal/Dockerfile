@@ -168,23 +168,23 @@ ARG PHP_SHORT_VERSION
 # see https://secure.php.net/manual/en/opcache.installation.php
 # we set enable_file_override as files won't change while container is up.
 RUN { \
-		echo 'opcache.memory_consumption=512'; \
-		echo 'opcache.interned_strings_buffer=64'; \
-		echo 'opcache.max_accelerated_files=30000'; \
-        echo 'opcache.enable_file_override=1'; \
-		echo 'opcache.validate_timestamps=0'; \
-	} > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
+  echo 'opcache.memory_consumption=512'; \
+  echo 'opcache.interned_strings_buffer=64'; \
+  echo 'opcache.max_accelerated_files=30000'; \
+  echo 'opcache.enable_file_override=1'; \
+  echo 'opcache.validate_timestamps=0'; \
+} > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
 # Override memory limit and upload max filesize and post max size
 # to enable bigger uploads
 RUN { \
-		echo 'memory_limit=512M'; \
-		echo 'upload_max_filesize=32M'; \
-		echo 'post_max_size=32M'; \
-    echo 'max_execution_time=180'; \
-    echo 'realpath_cache_size=8M'; \
-    echo 'apc.shm_size=64M'; \
-	} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
+  echo 'memory_limit=512M'; \
+  echo 'upload_max_filesize=32M'; \
+  echo 'post_max_size=32M'; \
+  echo 'max_execution_time=180'; \
+  echo 'realpath_cache_size=8M'; \
+  echo 'apc.shm_size=64M'; \
+} > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
