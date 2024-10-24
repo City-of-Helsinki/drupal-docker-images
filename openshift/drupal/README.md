@@ -23,7 +23,8 @@ Testing environment uses `*-dev` images by default and it's highly recommended t
 - Build the image: `make build-php81-dev` (change `php81` to whatever is your actual PHP version)
 - Find the image ID of latest `docker images ghcr.io/city-of-helsinki/drupal-docker-base` image and copy the image ID
 - Change project's `DRUPAL_IMAGE` (in `.env` file) to image ID from previous step
-- Change app container's volume from `/app` to `/var/www/html` (in `docker-compose.yml` file)
+- Add `SIMPLETEST_DB: "mysql://drupal:drupal@db:3306/drupal"` to `app` service's environments in `compose.yaml`
+- Change app container's volume from `/app` to `/var/www/html` (in `compose.yaml` file)
 - Re/start containers: `docker-compose stop && docker compose up -d`
 
 ### Building
