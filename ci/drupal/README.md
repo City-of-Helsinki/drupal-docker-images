@@ -30,11 +30,11 @@ See:
 
 To build a specific image, call:
 
-- `8.1-alpine` tag: `make build-php81`
+- `8.4-alpine` tag: `make build-php84`
 
 To run built image locally:
 
-- `8.1-alpine` tag: `make run-php81`
+- `8.4-alpine` tag: `make run-php84`
 
 ### Testing
 
@@ -42,7 +42,7 @@ We use [GoogleContainerTools/container-structure-test](https://github.com/Google
 
 Running tests will always rebuild the image first.
 
-- Run tests against `8.1-alpine` tag: `make test-php81`
+- Run tests against `8.4-alpine` tag: `make test-php84`
 
 ### Release process
 
@@ -53,6 +53,6 @@ Calling `make push-php*` will:
 
 Release a specific tag:
 
-- Release `8.1-alpine` tag: `make push-php81`
+- Release `8.4-alpine` tag: `make push-php84`
 
 Release all tags at once: `make push-php`.
