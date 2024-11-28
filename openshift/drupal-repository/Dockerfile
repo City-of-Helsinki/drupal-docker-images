@@ -18,8 +18,15 @@ EXPOSE      9000
 
 # Copy configuration files and scripts
 COPY files/ /
+
+RUN { \
+  echo '[safe]'; \
+  echo "directory = /var/www/html"; \
+} > /.gitconfig
+
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
+
 ENTRYPOINT ["/sbin/tini", "--"]
 
 # Default command: Start up multiple services via entrypoint
