@@ -10,101 +10,25 @@ help:
 # php-dev #
 ###########
 PHONY += build-php-dev
-build-php-dev: build-php81-dev build-php82-dev build-php83-dev
+build-php-dev: build-php83-dev build-php84-dev
 
 PHONY += push-php-dev
-push-php-dev: push-php81-dev push-php82-dev push-php83-dev
+push-php-dev: push-php83-dev push-php84-dev
 
 PHONY += test-php-dev
-test-php-dev: test-php81-dev test-php82-dev test-php83-dev
+test-php-dev: test-php83-dev test-php84-dev
 
 #######
 # php #
 #######
 PHONY += test-php
-test-php: test-php81 test-php82 test-php83
+test-php: test-php83 test-php84
 
 PHONY += push-php
-push-php: push-php81 push-php82 push-php83
+push-php: push-php83 push-php84
 
 PHONY += build-php
-build-php: build-php81 build-php82 build-php83
-
-###########
-# 8.1-dev #
-###########
-PHONY += build-php81-dev
-build-php81-dev:
-	$(call build_image,php81-dev)
-
-PHONY += run-php81-dev
-run-php81-dev:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.1-dev /bin/sh
-
-PHONY += push-php81-dev
-push-php81-dev: test-php81-dev
-	docker push $(REPOSITORY):8.1-dev
-
-PHONY += test-php81-dev
-test-php81-dev: build-php81-dev
-	$(call run_tests,8.1-dev)
-
-#######
-# 8.1 #
-#######
-PHONY += build-php81
-build-php81:
-	$(call build_image,php81)
-
-PHONY += run-php81
-run-php81:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.1 /bin/sh
-
-PHONY += push-php81
-push-php81: test-php81
-	docker push $(REPOSITORY):8.1
-
-PHONY += test-php81
-test-php81: build-php81
-	$(call run_tests,8.1)
-
-###########
-# 8.2-dev #
-###########
-PHONY += build-php82-dev
-build-php82-dev:
-	$(call build_image,php82-dev)
-
-PHONY += run-php82-dev
-run-php82-dev:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.2-dev /bin/sh
-
-PHONY += test-php82-dev
-test-php82-dev: build-php82-dev
-	$(call run_tests,8.2-dev)
-
-PHONY += push-php82-dev
-push-php82-dev: test-php82-dev
-	docker push $(REPOSITORY):8.2-dev
-
-#######
-# 8.2 #
-#######
-PHONY += build-php82
-build-php82:
-	$(call build_image,php82)
-
-PHONY += run-php82
-run-php82:
-	docker run -it --rm -u 100000 $(REPOSITORY):8.2 /bin/sh
-
-PHONY += test-php82
-test-php82: build-php82
-	$(call run_tests,8.2)
-
-PHONY += push-php82
-push-php82: test-php82
-	docker push $(REPOSITORY):8.2
+build-php: build-php83 build-php84
 
 ###########
 # 8.3-dev #
@@ -143,6 +67,44 @@ test-php83: build-php83
 PHONY += push-php83
 push-php83: test-php83
 	docker push $(REPOSITORY):8.3
+
+###########
+# 8.4-dev #
+###########
+PHONY += build-php84-dev
+build-php84-dev:
+	$(call build_image,php84-dev)
+
+PHONY += run-php84-dev
+run-php84-dev:
+	docker run -it --rm -u 100000 $(REPOSITORY):8.4-dev /bin/sh
+
+PHONY += test-php84-dev
+test-php84-dev: build-php84-dev
+	$(call run_tests,8.4-dev)
+
+PHONY += push-php84-dev
+push-php84-dev: test-php84-dev
+	docker push $(REPOSITORY):8.4-dev
+
+#######
+# 8.4 #
+#######
+PHONY += build-php84
+build-php84:
+	$(call build_image,php84)
+
+PHONY += run-php84
+run-php84:
+	docker run -it --rm -u 100000 $(REPOSITORY):8.4 /bin/sh
+
+PHONY += test-php84
+test-php84: build-php84
+	$(call run_tests,8.4)
+
+PHONY += push-php84
+push-php84: test-php84
+	docker push $(REPOSITORY):8.4
 
 define run_tests
 	container-structure-test test --image $(REPOSITORY):$(1) --config tests/php$(subst -dev,,$(subst .,,$(1))).yaml

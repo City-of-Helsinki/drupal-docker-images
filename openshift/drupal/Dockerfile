@@ -2,7 +2,7 @@ ARG PHP_VERSION
 ARG PHP_SHORT_VERSION
 ARG ALPINE_VERSION
 
-FROM alpine:${ALPINE_VERSION} as php
+FROM alpine:${ALPINE_VERSION} AS php
 
 RUN echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' >> /etc/profile
 ENV ENV="/etc/profile"
@@ -48,10 +48,9 @@ COPY files/ /
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
 
-# Create missing nginx folder.
-RUN mkdir -p /run/nginx
-
 RUN \
+    # Create missing nginx folder.
+  mkdir -p /run/nginx && \
   # COMPOSER_HOME permissions.
   mkdir -p $COMPOSER_HOME && \
   chmod -R a+rwx $COMPOSER_HOME && \
@@ -68,68 +67,7 @@ ENTRYPOINT ["/sbin/tini", "--"]
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
 
-FROM php as php81
-RUN set -eux; \
-    apk --no-cache add \
-    php81-pear \
-    php81-fpm \
-    php81-curl \
-    php81-fileinfo \
-    php81-iconv \
-    php81-mbstring \
-    php81-opcache \
-    php81-openssl \
-    php81-phar \
-    php81-session \
-    php81-zip \
-    php81-dom \
-    php81-pdo \
-    php81-pdo_mysql \
-    php81-tokenizer \
-    php81-xmlreader \
-    php81-xmlwriter \
-    php81-simplexml \
-    php81-ctype \
-    php81-gd \
-    php81-sodium \
-    php81-pecl-apcu \
-    php81-pecl-imagick \
-    php81-pecl-redis; \
-    ln -sfn /usr/bin/php81 /usr/bin/php && \
-    ln -sfn /usr/sbin/php-fpm81 /usr/bin/php-fpm;
-
-FROM php as php82
-RUN set -eux; \
-    apk --no-cache add \
-    php82-pear \
-    php82-fpm \
-    php82-curl \
-    php82-fileinfo \
-    php82-iconv \
-    php82-mbstring \
-    php82-opcache \
-    php82-openssl \
-    php82-phar \
-    php82-session \
-    php82-zip \
-    php82-dom \
-    php82-pdo \
-    php82-pdo_mysql \
-    php82-tokenizer \
-    php82-xmlreader \
-    php82-xmlwriter \
-    php82-simplexml \
-    php82-ctype \
-    php82-gd \
-    php82-sodium \
-    php82-pecl-apcu \
-    php82-pecl-redis; \
-    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
-    php82-pecl-imagick; \
-    ln -sfn /usr/bin/php82 /usr/bin/php && \
-    ln -sfn /usr/sbin/php-fpm82 /usr/bin/php-fpm;
-
-FROM php as php83
+FROM php AS php83
 RUN set -eux; \
     apk --no-cache add \
     php83-pear \
@@ -160,7 +98,37 @@ RUN set -eux; \
     ln -sfn /usr/bin/php83 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm83 /usr/bin/php-fpm;
 
-FROM php${PHP_SHORT_VERSION} as final
+FROM php AS php84
+RUN set -eux; \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
+    php84-pear \
+    php84-fpm \
+    php84-curl \
+    php84-fileinfo \
+    php84-iconv \
+    php84-mbstring \
+    php84-opcache \
+    php84-openssl \
+    php84-phar \
+    php84-session \
+    php84-zip \
+    php84-dom \
+    php84-pdo \
+    php84-pdo_mysql \
+    php84-tokenizer \
+    php84-xmlreader \
+    php84-xmlwriter \
+    php84-simplexml \
+    php84-ctype \
+    php84-gd \
+    php84-sodium \
+    php84-pecl-apcu \
+    php84-pecl-redis \
+    php84-pecl-imagick; \
+    ln -sfn /usr/bin/php84 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm84 /usr/bin/php-fpm;
+
+FROM php${PHP_SHORT_VERSION} AS final
 
 ARG PHP_SHORT_VERSION
 
@@ -175,8 +143,6 @@ RUN { \
   echo 'opcache.validate_timestamps=0'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
-# Override memory limit and upload max filesize and post max size
-# to enable bigger uploads
 RUN { \
   echo 'memory_limit=512M'; \
   echo 'upload_max_filesize=32M'; \

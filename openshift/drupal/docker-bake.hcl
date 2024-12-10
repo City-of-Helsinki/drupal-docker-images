@@ -6,11 +6,11 @@ group "default" {
 }
 
 group "dev" {
-  targets = ["php81-dev", "php82-dev", "php83-dev"]
+  targets = ["php83-dev", "php84-dev"]
 }
 
 group "prod" {
-  targets = ["php81", "php82", "php83"]
+  targets = ["php83", "php84"]
 }
 
 target "php" {
@@ -42,46 +42,25 @@ target "php83" {
   platforms = ["linux/amd64"]
 }
 
-target "php82-dev" {
+target "php84-dev" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.2"
-    PHP_SHORT_VERSION = "82"
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
     ALPINE_VERSION = "3.20"
   }
-  tags = ["${REPO_BASE}:8.2-dev"]
+  tags = ["${REPO_BASE}:8.4-dev"]
   platforms = ["linux/amd64"]
 }
 
-target "php82" {
+target "php84" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.2"
-    PHP_SHORT_VERSION = "82"
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
     ALPINE_VERSION = "3.20"
   }
-  tags = ["${REPO_BASE}:8.2"]
+  tags = ["${REPO_BASE}:8.4"]
   platforms = ["linux/amd64"]
 }
 
-target "php81-dev" {
-  inherits = ["php"]
-  args = {
-    PHP_VERSION = "8.1"
-    PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
-  }
-  tags = ["${REPO_BASE}:8.1-dev"]
-  platforms = ["linux/amd64"]
-}
-
-target "php81" {
-  inherits = ["php"]
-  args = {
-    PHP_VERSION = "8.1"
-    PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
-  }
-  tags = ["${REPO_BASE}:8.1"]
-  platforms = ["linux/amd64"]
-}
