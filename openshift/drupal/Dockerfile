@@ -1,17 +1,15 @@
-ARG PHP_VERSION
-ARG PHP_SHORT_VERSION
-ARG ALPINE_VERSION
+ARG PHP_VERSION=8.4
+ARG PHP_SHORT_VERSION=84
+ARG ALPINE_VERSION=3.20
 
 FROM alpine:${ALPINE_VERSION} AS php
-
-RUN echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' >> /etc/profile
-ENV ENV="/etc/profile"
 
 # Install required tools (https://docs.acquia.com/blt/install/)
 # alpine-sdk required for the make script in composer.json
 RUN set -eux; \
     apk update && apk upgrade && \
     apk add --no-cache git \
+    curl \
     patch \
     rsync \
     bash \
@@ -22,6 +20,11 @@ RUN set -eux; \
     jq \
     tini
 
+RUN \
+    touch /etc/bash/ps1.sh && \
+    echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' | tee /etc/profile /etc/bash/ps1.sh
+ENV ENV="/etc/profile"
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 
@@ -29,11 +32,11 @@ ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
 
 # Fetch the required certificate for the Azure MySQL flexible server service
-ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
+ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
 RUN wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
 
 # Fetch the required certificates for the Azure MariaDB service and combine them
-ENV AZURE_SQL_SSL_CA_PATH /usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
+ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
 RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
   wget https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem -O /tmp/g2.crt.pem && \
   cat /tmp/g2.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
@@ -49,7 +52,7 @@ RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
 
 RUN \
-    # Create missing nginx folder.
+  # Create missing nginx folder.
   mkdir -p /run/nginx && \
   # COMPOSER_HOME permissions.
   mkdir -p $COMPOSER_HOME && \
@@ -131,6 +134,7 @@ RUN set -eux; \
 FROM php${PHP_SHORT_VERSION} AS final
 
 ARG PHP_SHORT_VERSION
+ARG PHP_VERSION
 
 # Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
@@ -154,3 +158,9 @@ RUN { \
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
+
+FROM final AS test
+COPY tests/ /tests
+WORKDIR /tests
+RUN composer install && \
+    vendor/bin/phpunit

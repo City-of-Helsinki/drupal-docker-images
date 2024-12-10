@@ -18,6 +18,19 @@ target "php" {
   args = {
     ALPINE_VERSION = "3.20"
   }
+  platforms = ["linux/amd64", "linux/arm64"]
+  labels = {
+    "org.opencontainers.image.url" = "https://github.com/City-of-Helsinki/drupal-docker-images"
+    "org.opencontainers.image.source" = "https://github.com/City-of-Helsinki/drupal-docker-images"
+    "org.opencontainers.image.licenses" = "MIT"
+    "org.opencontainers.image.vendor" = "City of Helsinki"
+    "org.opencontainers.image.created" = "${timestamp()}"
+  }
+}
+
+target "test" {
+  target = "test"
+  output = ["type=cacheonly"]
 }
 
 target "php83-dev" {
@@ -28,7 +41,6 @@ target "php83-dev" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3-dev"]
-  platforms = ["linux/amd64"]
 }
 
 target "php83" {
@@ -39,7 +51,6 @@ target "php83" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3"]
-  platforms = ["linux/amd64"]
 }
 
 target "php84-dev" {
@@ -50,7 +61,6 @@ target "php84-dev" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.4-dev"]
-  platforms = ["linux/amd64"]
 }
 
 target "php84" {
@@ -61,6 +71,5 @@ target "php84" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.4"]
-  platforms = ["linux/amd64"]
 }
 
