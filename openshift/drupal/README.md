@@ -20,15 +20,10 @@ Testing environment uses `*-dev` images by default, and it's highly recommended 
 
 To build a specific image, call:
 
-- `8.4-dev` tag: `make build-php84-dev`
-- `8.4` tag: `make build-php84`
+- `8.4-dev` tag: `make push-php84-dev`
+- `8.4` tag: `make push-php84`
 
-To run built image locally:
-
-- `8.4-dev` tag: `make run-php84-dev`
-- `8.4` tag: `make run-php84`
-
-You can also build all tags at once: `make build-php-dev` (builds all `*-dev` tags) or `make build-php` (builds stable tags).
+You can also build all tags at once: `make push-php-dev` (builds all `*-dev` tags) or `make push-php` (builds stable tags).
 
 ### Testing
 

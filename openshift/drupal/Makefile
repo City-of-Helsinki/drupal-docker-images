@@ -9,9 +9,6 @@ help:
 ###########
 # php-dev #
 ###########
-PHONY += build-php-dev
-build-php-dev: build-php83-dev build-php84-dev
-
 PHONY += push-php-dev
 push-php-dev: push-php83-dev push-php84-dev
 
@@ -27,38 +24,27 @@ test-php: test-php83 test-php84
 PHONY += push-php
 push-php: push-php83 push-php84
 
-PHONY += build-php
-build-php: build-php83 build-php84
-
 ###########
 # 8.3-dev #
 ###########
-PHONY += build-php83-dev
-build-php83-dev:
-	$(call build_image,php83-dev)
-
 PHONY += test-php83-dev
-test-php83-dev: build-php83-dev
-	$(call run_tests,8.3-dev)
+test-php83-dev:
+	$(call run_tests,php83-dev)
 
 PHONY += push-php83-dev
-push-php83-dev: test-php83-dev
-	docker push $(REPOSITORY):8.3-dev
+push-php83-dev:
+	$(call build_image,php83-dev)
 
 #######
 # 8.3 #
 #######
-PHONY += build-php83
-build-php83:
-	$(call build_image,php83)
-
 PHONY += test-php83
-test-php83: build-php83
-	$(call run_tests,8.3)
+test-php83:
+	$(call run_tests,php83)
 
 PHONY += push-php83
 push-php83: test-php83
-	docker push $(REPOSITORY):8.3
+	$(call build_image,php83)
 
 ###########
 # 8.4-dev #
