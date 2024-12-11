@@ -5,7 +5,6 @@ ARG ALPINE_VERSION=3.20
 FROM alpine:${ALPINE_VERSION} AS php
 
 # Install required tools (https://docs.acquia.com/blt/install/)
-# alpine-sdk required for the make script in composer.json
 RUN set -eux; \
     apk update && apk upgrade && \
     apk add --no-cache git \
@@ -14,7 +13,13 @@ RUN set -eux; \
     rsync \
     bash \
     mariadb-client \
-    alpine-sdk \
+    # This is required by MySQL 8 (caching_sha2_password plugin)
+    mariadb-connector-c \
+    grep \
+    make \
+    git \
+    tar \
+    openssl \
     nginx \
     bash \
     jq \
@@ -25,8 +30,8 @@ RUN \
     echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' | tee /etc/profile /etc/bash/ps1.sh
 ENV ENV="/etc/profile"
 
-# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
+COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
 ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
@@ -63,7 +68,8 @@ RUN \
   # Correct permissions to nginx folders.
   chmod -R a+rwx /var/lib/nginx && \
   chmod -R a+rwx /var/log/nginx && \
-  chmod -R a+rwx /etc/nginx/conf.d
+  chmod -R a+rwx /etc/nginx/conf.d && \
+  chmod -R a+rwx /etc/nginx/http.d
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
@@ -91,9 +97,11 @@ RUN set -eux; \
     php83-xmlreader \
     php83-xmlwriter \
     php83-simplexml \
+    php83-sockets \
     php83-ctype \
     php83-gd \
     php83-sodium \
+    php83-bcmath \
     php83-pecl-apcu \
     php83-pecl-redis; \
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
@@ -114,6 +122,7 @@ RUN set -eux; \
     php84-openssl \
     php84-phar \
     php84-session \
+    php84-sockets \
     php84-zip \
     php84-dom \
     php84-pdo \
@@ -125,6 +134,7 @@ RUN set -eux; \
     php84-ctype \
     php84-gd \
     php84-sodium \
+    php84-bcmath \
     php84-pecl-apcu \
     php84-pecl-redis \
     php84-pecl-imagick; \

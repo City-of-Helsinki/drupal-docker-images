@@ -73,7 +73,7 @@ define run_tests
 endef
 
 define build_image
-	docker buildx bake $(BUILD_EXTRA_ARGS) --pull --push -f docker-bake.hcl $(1)
+	docker buildx bake $(BUILD_EXTRA_ARGS) --no-cache --pull --push -f docker-bake.hcl $(1)
 endef
 
 .PHONY: $(PHONY)
