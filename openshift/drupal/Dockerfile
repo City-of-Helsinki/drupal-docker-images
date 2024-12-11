@@ -28,13 +28,13 @@ RUN set -eux; \
 RUN \
     touch /etc/bash/ps1.sh && \
     echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' | tee /etc/profile /etc/bash/ps1.sh
-ENV ENV="/etc/profile"
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
 ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
+ENV ENV="/etc/profile"
 
 # Fetch the required certificate for the Azure MySQL flexible server service
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
@@ -172,5 +172,8 @@ COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 FROM final AS test
 COPY tests/ /tests
 WORKDIR /tests
-RUN composer install && \
+# Make sure all envplate substitutions are executed before
+# running tests.
+RUN /entrypoints/20-prepare-nginx.sh && \
+    composer install && \
     vendor/bin/phpunit
