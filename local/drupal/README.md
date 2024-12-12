@@ -1,16 +1,14 @@
 # Local Drupal docker image
 
-Based on [druidfi/drupal-web](https://github.com/druidfi/docker-images) with few additions:
+Based on [City-of-Helsinki/drupal-docker-base](/openshift/drupal) image with a few additions:
 
 - [OpenShift origin client (OC)](/local/oc)
-- Force HTTPS nginx fastcgi parameter `on` to make sure Drupal generates URLs using `https`
-- Run php-fpm and nginx as same user to prevent some weird permission issues
+- Xdebug
 
-Available PHP versions: `8.3`, `8.2`, `8.1`:
+Available PHP versions: `8.3`, `8.4`:
 
 - `ghcr.io/city-of-helsinki/drupal-web:8.3`
-- `ghcr.io/city-of-helsinki/drupal-web:8.2`
-- `ghcr.io/city-of-helsinki/drupal-web:8.1`
+- `ghcr.io/city-of-helsinki/drupal-web:8.4`
 
 ## Development
 

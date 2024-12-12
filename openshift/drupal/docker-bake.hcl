@@ -6,11 +6,11 @@ group "default" {
 }
 
 group "dev" {
-  targets = ["php81-dev", "php82-dev", "php83-dev"]
+  targets = ["php83-dev", "php84-dev"]
 }
 
 group "prod" {
-  targets = ["php81", "php82", "php83"]
+  targets = ["php83", "php84"]
 }
 
 target "php" {
@@ -18,6 +18,19 @@ target "php" {
   args = {
     ALPINE_VERSION = "3.20"
   }
+  platforms = ["linux/amd64", "linux/arm64"]
+  labels = {
+    "org.opencontainers.image.url" = "https://github.com/City-of-Helsinki/drupal-docker-images"
+    "org.opencontainers.image.source" = "https://github.com/City-of-Helsinki/drupal-docker-images"
+    "org.opencontainers.image.licenses" = "MIT"
+    "org.opencontainers.image.vendor" = "City of Helsinki"
+    "org.opencontainers.image.created" = "${timestamp()}"
+  }
+}
+
+target "test" {
+  target = "test"
+  output = ["type=cacheonly"]
 }
 
 target "php83-dev" {
@@ -28,7 +41,6 @@ target "php83-dev" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3-dev"]
-  platforms = ["linux/amd64"]
 }
 
 target "php83" {
@@ -39,49 +51,25 @@ target "php83" {
     ALPINE_VERSION = "3.20"
   }
   tags = ["${REPO_BASE}:8.3"]
-  platforms = ["linux/amd64"]
 }
 
-target "php82-dev" {
+target "php84-dev" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.2"
-    PHP_SHORT_VERSION = "82"
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
     ALPINE_VERSION = "3.20"
   }
-  tags = ["${REPO_BASE}:8.2-dev"]
-  platforms = ["linux/amd64"]
+  tags = ["${REPO_BASE}:8.4-dev"]
 }
 
-target "php82" {
+target "php84" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.2"
-    PHP_SHORT_VERSION = "82"
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
     ALPINE_VERSION = "3.20"
   }
-  tags = ["${REPO_BASE}:8.2"]
-  platforms = ["linux/amd64"]
+  tags = ["${REPO_BASE}:8.4"]
 }
 
-target "php81-dev" {
-  inherits = ["php"]
-  args = {
-    PHP_VERSION = "8.1"
-    PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
-  }
-  tags = ["${REPO_BASE}:8.1-dev"]
-  platforms = ["linux/amd64"]
-}
-
-target "php81" {
-  inherits = ["php"]
-  args = {
-    PHP_VERSION = "8.1"
-    PHP_SHORT_VERSION = "81"
-    ALPINE_VERSION = "3.19"
-  }
-  tags = ["${REPO_BASE}:8.1"]
-  platforms = ["linux/amd64"]
-}

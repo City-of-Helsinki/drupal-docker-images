@@ -1,44 +1,66 @@
-ARG PHP_VERSION
-ARG PHP_SHORT_VERSION
-FROM druidfi/drupal-web:php-${PHP_VERSION} as base
+ARG PHP_VERSION=8.4
+ARG PHP_SHORT_VERSION=84
+FROM ghcr.io/city-of-helsinki/drupal-docker-base:${PHP_VERSION} AS base
 
-COPY --from=ghcr.io/city-of-helsinki/drupal-oc-cli:latest /usr/bin/oc /usr/bin/oc
-
-RUN sudo apk add --no-cache jq
-
-RUN sudo composer self-update
-
-# Autostart drush server and syslog services.
-COPY entrypoints/ /entrypoints
-
-COPY files/ /
-
-# Override default fpm pool conf to run nginx and php-fpm as same user.
-COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
-
-RUN grep -qxF 'xdebug.log' /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini || echo 'xdebug.log=/tmp/xdebug.log' | sudo tee -a /etc/php${PHP_SHORT_VERSION}/conf.d/xdebug.ini && \
-  sudo -u root touch /tmp/xdebug.log && \
-  sudo chmod 666 /tmp/xdebug.log
-
-# Add druid user to nginx group to prevent permission issues with drush and 'asset://'
-# files.
-RUN sudo addgroup druid nginx
+ENV DRUPAL_DB_NAME=drupal \
+    DRUPAL_DB_USER=drupal \
+    DRUPAL_DB_PASS=drupal \
+    DRUPAL_DB_HOST=db \
+    DRUPAL_DB_PORT=3306
 
 ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}"
+ENV SIMPLETEST_BASE_URL=https://app
+ENV COMPOSER_HOME=/tmp/.composer
 
-FROM base as php81
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add php81-pecl-pcov php81-pecl-imagick
+RUN apk add --no-cache \
+  --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+  github-cli \
+  gnupg
 
-FROM base as php82
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+COPY entrypoints/ /entrypoints
+COPY files/usr /usr
+RUN chmod +x /entrypoints/* \
+    # Drush binary is needed in CI.
+    /usr/local/bin/drush
+
+COPY files/etc/nginx /etc/nginx
+
+WORKDIR /app
+
+ARG PHP_SHORT_VERSION
+# Remove opcache-recommended.ini because we make several performance
+# changes to OPcache settings that may hinder local development.
+RUN rm /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
+
+# Generate a self-signed cert for nginx. We use selenium+chromium to run
+# Functional javascript tests and it forces all requests to use https now.
+# We have a nginx config with a self-signed cert to proxy https requests
+# to 8080 port.
+# @see files/etc/nginx/http.d/ssl-proxy.conf
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
+  -keyout /etc/ssl/private/cert.key \
+  -out /etc/ssl/certs/cert.crt
+
+RUN chmod a+r /etc/ssl/certs/cert.crt \
+    /etc/ssl/private/cert.key
+
+FROM base AS php83
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add php82-pecl-imagick php82-pecl-pcov
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php83-pecl-xdebug \
+    php83-pecl-pcov
 
-FROM base as php83
-RUN sudo apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+COPY files/etc/php /etc/php83
+
+FROM base AS php84
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add php83-pecl-imagick php83-pecl-pcov
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php84-pecl-xdebug \
+    php84-pecl-pcov
+
+COPY files/etc/php /etc/php84
