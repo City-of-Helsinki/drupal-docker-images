@@ -18,7 +18,10 @@ RUN apk add --no-cache \
   gnupg
 
 COPY entrypoints/ /entrypoints
-RUN chmod +x /entrypoints/*
+COPY files/usr /usr
+RUN chmod +x /entrypoints/* \
+    # Drush binary is needed in CI.
+    /usr/local/bin/drush
 
 COPY files/etc/nginx /etc/nginx
 
