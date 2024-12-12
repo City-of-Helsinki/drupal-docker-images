@@ -32,19 +32,6 @@ ARG PHP_SHORT_VERSION
 # changes to OPcache settings that may hinder local development.
 RUN rm /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
 
-# Generate a self-signed cert for nginx. We use selenium+chromium to run
-# Functional javascript tests and it forces all requests to use https now.
-# We have a nginx config with a self-signed cert to proxy https requests
-# to 8080 port.
-# @see files/etc/nginx/http.d/ssl-proxy.conf
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
-  -keyout /etc/ssl/private/cert.key \
-  -out /etc/ssl/certs/cert.crt
-
-RUN chmod a+r /etc/ssl/certs/cert.crt \
-    /etc/ssl/private/cert.key
-
 FROM base AS php83
 RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
@@ -64,3 +51,28 @@ RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testi
     php84-pecl-pcov
 
 COPY files/etc/php /etc/php84
+
+ARG PHP_SHORT_VERSION
+FROM php${PHP_SHORT_VERSION} AS final
+
+# Generate a self-signed cert for nginx. We use selenium+chromium to run
+# Functional javascript tests and it forces all requests to use https now.
+# We have a nginx config with a self-signed cert to proxy https requests
+# to 8080 port.
+# @see files/etc/nginx/http.d/ssl-proxy.conf
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
+  -keyout /etc/ssl/private/cert.key \
+  -out /etc/ssl/certs/cert.crt
+
+RUN chmod a+r /etc/ssl/certs/cert.crt \
+    /etc/ssl/private/cert.key
+
+ENV DEFAULT_USER=app \
+    DEFAULT_USER_UID=1000
+
+RUN \
+    addgroup -S ${DEFAULT_USER} -g ${DEFAULT_USER_UID}; \
+    adduser -D -S -G ${DEFAULT_USER} -u ${DEFAULT_USER_UID} -s /bin/bash ${DEFAULT_USER};
+
+USER ${DEFAULT_USER}
