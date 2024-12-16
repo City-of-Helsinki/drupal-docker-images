@@ -25,16 +25,8 @@ RUN set -eux; \
     jq \
     tini
 
-RUN \
-    touch /etc/bash/ps1.sh && \
-    echo 'export PS1="[${APP_ENV:-env}] \[\e[1;31m\][${HOSTNAME:-hostname}] \[\e[1;33m\]\w\[\e[0m\] $ "' | tee /etc/profile /etc/bash/ps1.sh
-
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
-
-ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
-ENV COMPOSER_HOME=/.composer
-ENV ENV="/etc/profile"
 
 # Fetch the required certificate for the Azure MySQL flexible server service
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
@@ -53,8 +45,15 @@ EXPOSE 8080
 
 # Copy configuration files and scripts
 COPY files/ /
+# Copy /etc/profile.d shell scripts to bash equivalent as well.
+COPY files/etc/profile.d/ /etc/bash
+
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint
+
+ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
+ENV COMPOSER_HOME=/.composer
+ENV ENV="/etc/profile"
 
 RUN \
   # Create missing nginx folder.
