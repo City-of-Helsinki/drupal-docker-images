@@ -1,5 +1,7 @@
 FROM alpine:3.20
 
+COPY files/ /
+
 ENV OC_TAG=openshift-clients-4.17.0-202409111134
 RUN \
   apk add --no-cache --virtual .build-deps \
@@ -16,3 +18,5 @@ RUN \
   rm -rf /oc-code /root/go /root/.cache; \
   apk del .build-deps ; \
   oc version
+
+ENTRYPOINT /usr/local/bin/db-sync

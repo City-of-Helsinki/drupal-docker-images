@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# no-op
+# oc login --web wants to open a web browser, but there is
+# no simple way to do that from a docker container.
