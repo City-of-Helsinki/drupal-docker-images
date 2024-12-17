@@ -7,6 +7,12 @@ help:
 	@echo -e "See README.md for usage"
 
 ###########
+#   all   #
+###########
+PHONY += all
+all: push-php-dev push-php
+
+###########
 # php-dev #
 ###########
 PHONY += push-php-dev

@@ -1,6 +1,9 @@
 PHONY :=
 REPOSITORY = ghcr.io/city-of-helsinki/drupal-web
 
+PHONY += all
+all: push-php-dev push-php
+
 PHONY += push-php84-dev
 push-php84-dev:
 	$(call push_image,8.4-dev,84)
