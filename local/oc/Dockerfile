@@ -1,6 +1,10 @@
 FROM alpine:3.20
 
 ENV OC_TAG=openshift-clients-4.17.0-202409111134
+
+# oc login --web uses xdg-open to open link in a browser and the command will fail.
+COPY --chmod=744 xdg-open db-sync /usr/local/bin/
+
 RUN \
   apk add --no-cache rsync; \
   apk add --no-cache --virtual .build-deps \
