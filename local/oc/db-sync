@@ -9,7 +9,7 @@ fi
 
 
 if ! oc whoami > /dev/null 2>&1; then
-  oc login --token=$OC_LOGIN_TOKEN --server=https://api.arodevtest.hel.fi:6443 --web --callback-port 8280
+  oc login --server=https://api.arodevtest.hel.fi:6443 --web --callback-port 8280
 fi
 oc project ${OC_PROJECT_NAME}
 
