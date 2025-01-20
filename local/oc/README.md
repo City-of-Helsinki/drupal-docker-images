@@ -15,3 +15,7 @@ This is used by [local Drupal image](/local/drupal) image.
 ### Release process
 
 - `make release`
+
+### Known issues
+
+The build seems to fail pretty often and you might have to re-run it multiple times.
