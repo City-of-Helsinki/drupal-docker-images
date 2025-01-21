@@ -7,9 +7,9 @@ if [ ! -n "$OC_PROJECT_NAME" ]; then
   exit 1;
 fi
 
-
 if ! oc whoami > /dev/null 2>&1; then
-  oc login --server=https://api.arodevtest.hel.fi:6443 --web --callback-port 8280
+  read -s -p "You must obtain an API token by visiting https://oauth-openshift.apps.arodevtest.hel.fi/oauth/token/request (Token):" OC_LOGIN_TOKEN
+  oc login --token=$OC_LOGIN_TOKEN --server=https://api.arodevtest.hel.fi:6443
 fi
 oc project ${OC_PROJECT_NAME}
 
