@@ -1,8 +1,6 @@
 #!/bin/sh
 
 source /init.sh
-# Run preflight checks manually.
-source /entrypoints/10-preflight.sh
 
 # This script will be the default ENTRYPOINT for deployment job pod.
 # It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
