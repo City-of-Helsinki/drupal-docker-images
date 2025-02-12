@@ -49,7 +49,8 @@ COPY files/ /
 COPY files/etc/profile.d/ /etc/bash
 
 RUN chmod +x /entrypoints/* && \
-  chmod +x /usr/local/bin/entrypoint
+  chmod +x /usr/local/bin/entrypoint && \
+
 
 ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
