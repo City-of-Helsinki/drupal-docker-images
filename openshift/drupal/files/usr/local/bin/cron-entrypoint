@@ -4,7 +4,7 @@ source /init.sh
 
 echo "Starting cron: $(date)"
 
-# You can add any additional cron "daemons" to docker/openshift/crons/ folder.
+# You can add any additional cron "daemons" to project's docker/openshift/crons/ folder.
 #
 # Example:
 # @code
