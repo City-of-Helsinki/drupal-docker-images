@@ -1,0 +1,21 @@
+#!/bin/sh
+
+source /init.sh
+
+# This script will be the default ENTRYPOINT for deployment job pod.
+# It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
+# You can add additional deploy scripts to project's docker/openshift/deploy folder.
+if [ -d /deploy ]; then
+  for i in /deploy/*; do
+    if [ -r $i ]; then
+      echo "# Source $i"
+      . $i
+    else
+      echo "! $i not sourced"
+    fi
+  done
+  unset i
+fi
+
+echo "Exec: $@"
+exec "$@"
