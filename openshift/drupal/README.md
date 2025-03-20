@@ -13,7 +13,6 @@ Testing environment uses `*-dev` images by default, and it's highly recommended 
 
 ### Requirements
 
-- Install [GoogleContainerTools/container-structure-test](https://github.com/GoogleContainerTools/container-structure-test)
 - [docker/buildx](https://github.com/docker/buildx) (most likely already included by default)
 
 ### Building
