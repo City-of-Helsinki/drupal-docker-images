@@ -58,6 +58,7 @@ ENV ENV="/etc/profile"
 RUN \
   # Create private files folder
   mkdir -p /private_files && \
+  chmod a+rwx /private_files && \
   # Create missing nginx folder.
   mkdir -p /run/nginx && \
   # COMPOSER_HOME permissions.
