@@ -14,7 +14,7 @@ class PathTest extends TestCase {
     $this->assertTrue(is_dir($path));
   }
 
-  public static function pathData() : array {
+  public static function directoryData() : array {
     return [
       ['/private_files'],
     ];
