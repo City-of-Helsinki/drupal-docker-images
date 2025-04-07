@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class EnvVariableTest extends TestCase {
 
   #[DataProvider(methodName: 'envVariableData')]
-  public function testExtension(string $envVariable, string $expectedValue) : void {
+  public function testEnvVariable(string $envVariable, string $expectedValue) : void {
     $this->assertEquals($expectedValue, getenv($envVariable));
   }
 
