@@ -11,6 +11,7 @@ ENV DRUPAL_DB_NAME=drupal \
 ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}"
 ENV SIMPLETEST_BASE_URL=https://app
 ENV COMPOSER_HOME=/tmp/.composer
+ENV DRUSH_ALLOW_XDEBUG=1
 
 RUN apk add --no-cache \
   --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
