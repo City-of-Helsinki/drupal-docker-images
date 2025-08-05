@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ -r /init.sh ]; then
+  source /init.sh
+fi
+
+cleanup() {
+  drush state:set system.maintenance_mode 0 --input-format=integer
+}
+
+# Enable maintenance mode.
+drush state:set system.maintenance_mode 1 --input-format=integer
+
+# Clear maintenance mode on EXIT.
+trap cleanup EXIT
+
+# This script will be the default ENTRYPOINT for post db replace job pod.
+# It just sources all files within /db-replace/* in an alphabetical order and then runs `exec` on the given parameter.
+if [ -d /db-replace ]; then
+  for i in /db-replace/*; do
+    if [ -r $i ]; then
+      echo "# Source $i"
+      . $i
+    else
+      echo "! $i not sourced"
+    fi
+  done
+  unset i
+fi
+
+echo "Exec: $@"
+exec "$@"

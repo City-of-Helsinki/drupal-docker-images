@@ -1,6 +1,8 @@
 #!/bin/sh
 
-source /init.sh
+if [ -r /init.sh ]; then
+  source /init.sh
+fi
 
 # This script will be the default ENTRYPOINT for deployment job pod.
 # It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
