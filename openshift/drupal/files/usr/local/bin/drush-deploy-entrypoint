@@ -1,20 +1,7 @@
 #!/bin/sh
 
 source /init.sh
-
-source_all_files_in_dir() {
-  dir="$1"
-  for i in "$dir"/*; do
-    if [ -r $i ]; then
-      echo "# Source $i"
-      . $i
-    else
-      echo "! $i not sourced"
-    fi
-  done
-  unset i
-  unset dir
-}
+source /usr/local/share/common.sh
 
 # This script will be the default ENTRYPOINT for deployment job pod.
 # It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
