@@ -2,11 +2,9 @@
 
 source /init.sh
 
-# This script will be the default ENTRYPOINT for deployment job pod.
-# It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
-# You can add additional deploy scripts to project's docker/openshift/deploy folder.
-if [ -d /deploy ]; then
-  for i in /deploy/*; do
+source_all_files_in_dir() {
+  dir="$1"
+  for i in "$dir"/*; do
     if [ -r $i ]; then
       echo "# Source $i"
       . $i
@@ -15,6 +13,17 @@ if [ -d /deploy ]; then
     fi
   done
   unset i
+  unset dir
+}
+
+# This script will be the default ENTRYPOINT for deployment job pod.
+# It just sources all files within /deploy/* in an alphabetical order and then runs `exec` on the given parameter.
+# You can add additional deploy scripts to project's docker/openshift/deploy folder.
+if [ -d /hooks/deploy ]; then
+    source_all_files_in_dir "/hooks/deploy"
+elif [ -d /deploy ]; then
+    echo "DEPRECATED: use /hooks/deploy"
+    source_all_files_in_dir "/deploy"
 fi
 
 echo "Exec: $@"
