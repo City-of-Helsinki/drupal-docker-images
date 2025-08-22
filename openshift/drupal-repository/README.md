@@ -4,6 +4,6 @@ This image is used to run [City-of-Helsinki/drupal-repository](https://github.co
 
 ## Development
 
-Build the image: `make build`.
+Build the image: `make test`.
 
 Push the image: `make push`.
