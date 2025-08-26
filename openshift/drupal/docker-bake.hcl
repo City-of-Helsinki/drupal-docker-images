@@ -16,7 +16,7 @@ group "prod" {
 target "php" {
   target = "final"
   args = {
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.22"
   }
   platforms = ["linux/amd64", "linux/arm64"]
   labels = {
@@ -38,7 +38,7 @@ target "php83-dev" {
   args = {
     PHP_VERSION = "8.3"
     PHP_SHORT_VERSION = "83"
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.22"
   }
   tags = ["${REPO_BASE}:8.3-dev"]
 }
@@ -48,7 +48,7 @@ target "php83" {
   args = {
     PHP_VERSION = "8.3"
     PHP_SHORT_VERSION = "83"
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.22"
   }
   tags = ["${REPO_BASE}:8.3"]
 }
@@ -68,7 +68,7 @@ target "php84" {
   args = {
     PHP_VERSION = "8.4"
     PHP_SHORT_VERSION = "84"
-    ALPINE_VERSION = "3.20"
+    ALPINE_VERSION = "3.22"
   }
   tags = ["${REPO_BASE}:8.4"]
 }

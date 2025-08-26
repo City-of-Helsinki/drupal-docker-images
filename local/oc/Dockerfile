@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.22
 
 ENV OC_TAG=openshift-clients-4.17.0-202409111134
 

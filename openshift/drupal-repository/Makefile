@@ -4,13 +4,13 @@ ifeq ($(TAG),)
 	TAG = latest
 endif
 
-.PHONY: push release
+.PHONY: push test
 
 default: push
 
-test-amd64:
-	docker buildx build --pull --platform linux/amd64 -t $(REPOSITORY):$(TAG) ./ --load
+test:
+	docker buildx build --pull -t $(REPOSITORY):$(TAG) ./ --load
 push:
 	docker buildx build --pull --platform linux/arm64,linux/amd64 -t $(REPOSITORY):$(TAG) ./ --push
 
-release: build push
+release: push

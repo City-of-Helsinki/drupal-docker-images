@@ -1,6 +1,6 @@
 ARG PHP_VERSION=8.4
 ARG PHP_SHORT_VERSION=84
-ARG ALPINE_VERSION=3.20
+ARG ALPINE_VERSION=3.22
 
 FROM alpine:${ALPINE_VERSION} AS php
 
@@ -30,7 +30,8 @@ COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
 # Fetch the required certificate for the Azure MySQL flexible server service
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
-RUN wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
+RUN mkdir -p /usr/local/share/ca-certificates && \
+    wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
 
 # Fetch the required certificates for the Azure MariaDB service and combine them
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem

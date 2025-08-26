@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.22
 
 COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 EXPOSE 9000
