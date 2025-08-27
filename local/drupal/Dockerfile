@@ -69,6 +69,9 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 RUN chmod a+r /etc/ssl/certs/cert.crt \
     /etc/ssl/private/cert.key
 
+# Configure mariadb
+COPY files/etc/my.cnf.d/* /etc/my.cnf.d/
+
 ENV DEFAULT_USER=app \
     DEFAULT_USER_UID=1000
 
