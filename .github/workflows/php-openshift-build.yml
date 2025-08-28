@@ -20,6 +20,9 @@ jobs:
         working-directory: openshift/drupal
         run: make test-php
 
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Push to repository
         working-directory: openshift/drupal
         run: make push-php-dev
