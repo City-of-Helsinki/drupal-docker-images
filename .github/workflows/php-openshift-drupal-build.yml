@@ -1,8 +1,15 @@
 on:
   workflow_dispatch:
-  push:
+    inputs:
+      environment:
+        type: choice
+        description: The environment
+        options:
+          - dev
+          - prod
 jobs:
-  php-openshift:
+  build-openshift-drupal:
+    name: Build OpenShift Drupal image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +30,13 @@ jobs:
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push to repository
+      - name: Build and push production image
         working-directory: openshift/drupal
-        run: make push-php-dev
+        if: github.event.inputs.environment == 'prod'
+        run: make push-php
+
+      - name: Build and push developer image
+        working-directory: openshift/drupal
+        if: github.event.inputs.environment == 'dev'
+        run: make push-php
+
