@@ -210,13 +210,10 @@ RUN apk add --no-cache \
   github-cli \
   gnupg
 
-COPY local/entrypoints/ /entrypoints
-COPY local/files/usr /usr
+COPY local/files/ /
 RUN chmod +x /entrypoints/* \
     # Drush binary is needed in CI.
     /usr/local/bin/drush
-
-COPY local/files/etc/nginx /etc/nginx
 
 # Generate a self-signed cert for nginx. We use selenium+chromium to run
 # Functional javascript tests and it forces all requests to use https now.
@@ -230,9 +227,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 RUN chmod a+r /etc/ssl/certs/cert.crt \
     /etc/ssl/private/cert.key
-
-# Configure mariadb
-COPY local/files/etc/my.cnf.d/* /etc/my.cnf.d/
 
 ENV DEFAULT_USER=app \
     DEFAULT_USER_UID=1000
