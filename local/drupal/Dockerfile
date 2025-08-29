@@ -25,6 +25,7 @@ RUN chmod +x /entrypoints/* \
     /usr/local/bin/drush
 
 COPY files/etc/nginx /etc/nginx
+COPY files/etc/drush /etc/drush
 
 WORKDIR /app
 

@@ -1,0 +1,13 @@
+command:
+  # MariaDB cli requires valid certificate by default,
+  # which we don't have for local environment.
+  sql:
+    query:
+      options:
+        extra: "--skip-ssl"
+    cli:
+      options:
+        extra: "--skip-ssl"
+    dump:
+      options:
+        extra-dump: "--skip-ssl"
