@@ -1,6 +1,4 @@
 PHONY :=
-BUILD_EXTRA_ARGS :=
-REPOSITORY = ghcr.io/city-of-helsinki/drupal-docker-base
 
 PHONY += help
 help:
@@ -20,6 +18,9 @@ push-php-dev: push-php83-dev push-php84-dev
 
 PHONY += test-php-dev
 test-php-dev: test-php83-dev test-php84-dev
+
+PHONY += test-web-dev
+test-web-dev: test-php83-web-dev test-php84-web-dev
 
 #######
 # php #
@@ -41,6 +42,14 @@ PHONY += push-php83-dev
 push-php83-dev:
 	$(call build_image,php83-dev)
 
+PHONY += test-php83-web-dev
+test-php83-web-dev:
+	$(call run_tests,web-php83-dev)
+
+PHONY += push-php83-web-dev
+push-php83-web-dev:
+	$(call build_image,web-php83-dev)
+
 #######
 # 8.3 #
 #######
@@ -51,6 +60,14 @@ test-php83:
 PHONY += push-php83
 push-php83: test-php83
 	$(call build_image,php83)
+
+PHONY += test-php83-web
+test-php83-web:
+	$(call run_tests,web-php83)
+
+PHONY += push-php83-web
+push-php83-web: test-php83-web
+	$(call build_image,web-php83)
 
 ###########
 # 8.4-dev #
@@ -63,6 +80,14 @@ PHONY += push-php84-dev
 push-php84-dev: test-php84-dev
 	$(call build_image,php84-dev)
 
+PHONY += test-php84-web-dev
+test-php84-web-dev:
+	$(call run_tests,web-php84-dev)
+
+PHONY += push-php84-web-dev
+push-php84-web-dev: test-php84-web-dev
+	$(call build_image,web-php84-dev)
+
 #######
 # 8.4 #
 #######
@@ -74,12 +99,20 @@ PHONY += push-php84
 push-php84: test-php84
 	$(call build_image,php84)
 
+PHONY += test-php84-web
+test-php84-web:
+	$(call run_tests,web-php84)
+
+PHONY += push-php84-web
+push-php84-web: test-php84-web
+	$(call build_image,web-php84)
+
 define run_tests
-	docker buildx bake test $(1) test
+	docker buildx bake $(1) test
 endef
 
 define build_image
-	docker buildx bake $(BUILD_EXTRA_ARGS) --no-cache --pull --push -f docker-bake.hcl $(1)
+	docker buildx bake --no-cache --pull --push -f docker-bake.hcl $(1)
 endef
 
 .PHONY: $(PHONY)

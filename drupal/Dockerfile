@@ -45,9 +45,9 @@ RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tm
 EXPOSE 8080
 
 # Copy configuration files and scripts
-COPY files/ /
+COPY openshift/files/ /
 # Copy /etc/profile.d shell scripts to bash equivalent as well.
-COPY files/etc/profile.d/ /etc/bash
+COPY openshift/files/etc/profile.d/ /etc/bash
 
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/*
@@ -170,7 +170,88 @@ RUN { \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
-COPY php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
+COPY openshift/php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
+
+FROM final AS drupal-web
+
+ENV DRUPAL_DB_NAME=drupal \
+    DRUPAL_DB_USER=drupal \
+    DRUPAL_DB_PASS=drupal \
+    DRUPAL_DB_HOST=db \
+    DRUPAL_DB_PORT=3306
+
+ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}"
+ENV SIMPLETEST_BASE_URL=https://app
+ENV COMPOSER_HOME=/tmp/.composer
+ENV DRUSH_ALLOW_XDEBUG=1
+
+RUN apk add --no-cache \
+  --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+  github-cli \
+  gnupg
+
+COPY local/entrypoints/ /entrypoints
+COPY local/files/usr /usr
+RUN chmod +x /entrypoints/* \
+    # Drush binary is needed in CI.
+    /usr/local/bin/drush
+
+COPY local/files/etc/nginx /etc/nginx
+
+WORKDIR /app
+
+ARG PHP_SHORT_VERSION
+# Remove opcache-recommended.ini because we make several performance
+# changes to OPcache settings that may hinder local development.
+RUN rm /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
+
+FROM drupal-web AS drupal-web-php83
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php83-pecl-xdebug \
+    php83-pecl-pcov
+
+COPY local/files/etc/php /etc/php83
+
+FROM drupal-web AS drupal-web-php84
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php84-pecl-xdebug \
+    php84-pecl-pcov
+
+COPY local/files/etc/php /etc/php84
+
+ARG PHP_SHORT_VERSION
+FROM drupal-web-php${PHP_SHORT_VERSION} AS drupal-web-final
+
+# Generate a self-signed cert for nginx. We use selenium+chromium to run
+# Functional javascript tests and it forces all requests to use https now.
+# We have a nginx config with a self-signed cert to proxy https requests
+# to 8080 port.
+# @see files/etc/nginx/http.d/ssl-proxy.conf
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
+  -keyout /etc/ssl/private/cert.key \
+  -out /etc/ssl/certs/cert.crt
+
+RUN chmod a+r /etc/ssl/certs/cert.crt \
+    /etc/ssl/private/cert.key
+
+# Configure mariadb
+COPY local/files/etc/my.cnf.d/* /etc/my.cnf.d/
+
+ENV DEFAULT_USER=app \
+    DEFAULT_USER_UID=1000
+
+RUN \
+    addgroup -S ${DEFAULT_USER} -g ${DEFAULT_USER_UID}; \
+    adduser -D -S -G ${DEFAULT_USER} -u ${DEFAULT_USER_UID} -s /bin/bash ${DEFAULT_USER};
+
+USER ${DEFAULT_USER}
 
 FROM final AS test
 COPY tests/ /tests

@@ -3,15 +3,18 @@ on:
     paths:
       - '!**.md'
       - 'openshift/drupal/**'
-      - '.github/workflows/php-openshift.yml'
+      - 'local/drupal/**'
+      - '.github/workflows/drupal-image-tests.yml'
   push:
     branches: [ main ]
     paths:
       - '!**.md'
       - 'openshift/drupal/**'
-      - '.github/workflows/php-openshift.yml'
+      - 'local/drupal/**'
+      - '.github/workflows/drupal-image-tests.yml'
 jobs:
-  php-openshift:
+  drupal-tests:
+    name: Drupal image tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
