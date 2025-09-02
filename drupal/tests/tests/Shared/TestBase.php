@@ -10,8 +10,21 @@ abstract class TestBase extends TestCase {
 
   protected static ?string $phpVersion = NULL;
 
+  public static function getPhpVersion() : string {
+    if (static::$phpVersion === NULL) {
+      static::$phpVersion = getenv('PHP_VERSION');
+    }
+    return static::$phpVersion;
+  }
+
+  public static function getPhpShortVersion() : string {
+    return str_replace('.', '', static::getPhpVersion());
+  }
+
   protected function setUp(): void {
-    static::$phpVersion = getenv('PHP_VERSION');
+    parent::setUp();
+
+    static::$phpVersion = static::getPhpVersion();
     $this->assertNotEmpty(static::$phpVersion);
   }
 

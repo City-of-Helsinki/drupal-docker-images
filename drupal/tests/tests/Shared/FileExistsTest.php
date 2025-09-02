@@ -19,6 +19,7 @@ class FileExistsTest extends TestBase {
       ['/usr/local/bin/cron-entrypoint', TRUE],
       ['/usr/local/bin/entrypoint', TRUE],
       ['/usr/local/bin/post-db-replace', TRUE],
+      ['/etc/php' . static::getPhpShortVersion() . '/php-fpm.d/www.conf', TRUE],
     ];
   }
 
