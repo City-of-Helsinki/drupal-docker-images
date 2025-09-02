@@ -2,15 +2,13 @@ on:
   pull_request:
     paths:
       - '!**.md'
-      - 'openshift/drupal/**'
-      - 'local/drupal/**'
+      - 'drupal/**'
       - '.github/workflows/drupal-image-tests.yml'
   push:
     branches: [ main ]
     paths:
       - '!**.md'
-      - 'openshift/drupal/**'
-      - 'local/drupal/**'
+      - 'drupal/**'
       - '.github/workflows/drupal-image-tests.yml'
 jobs:
   drupal-tests:
