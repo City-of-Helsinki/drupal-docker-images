@@ -36,7 +36,7 @@ push-php: push-php83 push-php84
 ###########
 PHONY += test-php83-dev
 test-php83-dev:
-	$(call run_tests,php83-dev)
+	$(call run_tests,test-php83)
 
 PHONY += push-php83-dev
 push-php83-dev:
@@ -44,7 +44,7 @@ push-php83-dev:
 
 PHONY += test-php83-web-dev
 test-php83-web-dev:
-	$(call run_tests,web-php83-dev)
+	$(call run_tests,drupal-web-test-php83)
 
 PHONY += push-php83-web-dev
 push-php83-web-dev:
@@ -55,7 +55,7 @@ push-php83-web-dev:
 #######
 PHONY += test-php83
 test-php83:
-	$(call run_tests,php83)
+	$(call run_tests,test-php83)
 
 PHONY += push-php83
 push-php83: test-php83
@@ -63,7 +63,7 @@ push-php83: test-php83
 
 PHONY += test-php83-web
 test-php83-web:
-	$(call run_tests,web-php83)
+	$(call run_tests,drupal-web-test-php83)
 
 PHONY += push-php83-web
 push-php83-web: test-php83-web
@@ -74,7 +74,7 @@ push-php83-web: test-php83-web
 ###########
 PHONY += test-php84-dev
 test-php84-dev:
-	$(call run_tests,php84-dev)
+	$(call run_tests,test-php84)
 
 PHONY += push-php84-dev
 push-php84-dev: test-php84-dev
@@ -82,7 +82,7 @@ push-php84-dev: test-php84-dev
 
 PHONY += test-php84-web-dev
 test-php84-web-dev:
-	$(call run_tests,web-php84-dev)
+	$(call run_tests,drupal-web-test-php84)
 
 PHONY += push-php84-web-dev
 push-php84-web-dev: test-php84-web-dev
@@ -93,7 +93,7 @@ push-php84-web-dev: test-php84-web-dev
 #######
 PHONY += test-php84
 test-php84:
-	$(call run_tests,php84)
+	$(call run_tests,test-php84)
 
 PHONY += push-php84
 push-php84: test-php84
@@ -101,18 +101,18 @@ push-php84: test-php84
 
 PHONY += test-php84-web
 test-php84-web:
-	$(call run_tests,web-php84)
+	$(call run_tests,drupal-web-test-php84)
 
 PHONY += push-php84-web
 push-php84-web: test-php84-web
 	$(call build_image,web-php84)
 
 define run_tests
-	docker buildx bake $(1) test
+	docker buildx bake --no-cache $(1)
 endef
 
 define build_image
-	docker buildx bake --no-cache --pull --push -f docker-bake.hcl $(1)
+	docker buildx bake --no-cache --pull --push $(1)
 endef
 
 .PHONY: $(PHONY)

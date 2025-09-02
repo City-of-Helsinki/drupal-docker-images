@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace tests;
+namespace Tests\Shared;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class EnvVariableTest extends TestCase {
+class EnvVariableTest extends TestBase {
 
   #[DataProvider(methodName: 'envVariableData')]
   public function testEnvVariable(string $envVariable, string $expectedValue) : void {
@@ -17,7 +16,6 @@ class EnvVariableTest extends TestCase {
   public static function envVariableData() : array {
     return [
       ['PATH', '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/vendor/bin:/var/www/html/vendor/bin'],
-      ['COMPOSER_HOME', '/.composer'],
       ['AZURE_SQL_SSL_CA_PATH', '/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem'],
     ];
   }

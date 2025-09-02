@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace tests;
+namespace Tests\Shared;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class PathTest extends TestCase {
+class PathTest extends TestBase {
 
   #[DataProvider(methodName: 'directoryData')]
   public function testDirectory(string $path) : void {

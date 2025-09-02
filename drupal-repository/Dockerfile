@@ -16,7 +16,7 @@ RUN \
   chmod -R a+rwx $COMPOSER_HOME
 
 # Copy configuration files and scripts
-COPY files/ /
+COPY files /
 
 RUN chmod +x /entrypoints/* && \
   chmod +x /usr/local/bin/entrypoint

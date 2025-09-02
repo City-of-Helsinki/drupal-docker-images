@@ -1,8 +1,8 @@
-ARG PHP_VERSION=8.4
 ARG PHP_SHORT_VERSION=84
+ARG TEST_TARGET=php
 ARG ALPINE_VERSION=3.22
 
-FROM alpine:${ALPINE_VERSION} AS php
+FROM alpine:${ALPINE_VERSION} AS base
 
 # Install required tools (https://docs.acquia.com/blt/install/)
 RUN set -eux; \
@@ -28,14 +28,11 @@ RUN set -eux; \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
-# Fetch the required certificate for the Azure MySQL flexible server service
-ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
-RUN mkdir -p /usr/local/share/ca-certificates && \
-    wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
-
 # Fetch the required certificates for the Azure MariaDB service and combine them
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
-RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
+RUN \
+  mkdir -p /usr/local/share/ca-certificates && \
+  wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
   wget https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem -O /tmp/g2.crt.pem && \
   cat /tmp/g2.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
   cat /tmp/baltimore.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
@@ -79,7 +76,9 @@ ENTRYPOINT ["/sbin/tini", "--"]
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
 
-FROM php AS php83
+FROM base AS php83
+
+ENV PHP_VERSION=8.3
 RUN set -eux; \
     apk --no-cache add \
     php83-pear \
@@ -112,7 +111,9 @@ RUN set -eux; \
     ln -sfn /usr/bin/php83 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm83 /usr/bin/php-fpm;
 
-FROM php AS php84
+FROM base AS php84
+
+ENV PHP_VERSION=8.4
 RUN set -eux; \
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     php84-pear \
@@ -144,11 +145,10 @@ RUN set -eux; \
     ln -sfn /usr/bin/php84 /usr/bin/php && \
     ln -sfn /usr/sbin/php-fpm84 /usr/bin/php-fpm;
 
-FROM php${PHP_SHORT_VERSION} AS final
-
+FROM php${PHP_SHORT_VERSION} AS final-php
 ARG PHP_SHORT_VERSION
-ARG PHP_VERSION
 
+ENV TESTSUITE=openshift
 # Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 # we set enable_file_override as files won't change while container is up.
@@ -172,18 +172,38 @@ RUN { \
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY openshift/php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 
-FROM final AS drupal-web
+FROM php83 AS drupal-web-php83
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php83-pecl-xdebug \
+    php83-pecl-pcov
 
+COPY local/files/etc/php /etc/php83
+
+FROM php84 AS drupal-web-php84
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php84-pecl-xdebug \
+    php84-pecl-pcov
+
+COPY local/files/etc/php /etc/php84
+
+FROM drupal-web-php${PHP_SHORT_VERSION} AS final-drupal-web
 ENV DRUPAL_DB_NAME=drupal \
     DRUPAL_DB_USER=drupal \
     DRUPAL_DB_PASS=drupal \
     DRUPAL_DB_HOST=db \
     DRUPAL_DB_PORT=3306
 
-ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}"
-ENV SIMPLETEST_BASE_URL=https://app
-ENV COMPOSER_HOME=/tmp/.composer
-ENV DRUSH_ALLOW_XDEBUG=1
+ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}:${DRUPAL_DB_PORT}/${DRUPAL_DB_NAME}" \
+ SIMPLETEST_BASE_URL=https://app \
+ COMPOSER_HOME=/tmp/.composer \
+ DRUSH_ALLOW_XDEBUG=1 \
+ TESTSUITE=local
 
 RUN apk add --no-cache \
   --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -197,36 +217,6 @@ RUN chmod +x /entrypoints/* \
     /usr/local/bin/drush
 
 COPY local/files/etc/nginx /etc/nginx
-
-WORKDIR /app
-
-ARG PHP_SHORT_VERSION
-# Remove opcache-recommended.ini because we make several performance
-# changes to OPcache settings that may hinder local development.
-RUN rm /etc/php${PHP_SHORT_VERSION}/conf.d/opcache-recommended.ini
-
-FROM drupal-web AS drupal-web-php83
-RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
-    php83-pecl-xdebug \
-    php83-pecl-pcov
-
-COPY local/files/etc/php /etc/php83
-
-FROM drupal-web AS drupal-web-php84
-RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
-    php84-pecl-xdebug \
-    php84-pecl-pcov
-
-COPY local/files/etc/php /etc/php84
-
-ARG PHP_SHORT_VERSION
-FROM drupal-web-php${PHP_SHORT_VERSION} AS drupal-web-final
 
 # Generate a self-signed cert for nginx. We use selenium+chromium to run
 # Functional javascript tests and it forces all requests to use https now.
@@ -251,13 +241,17 @@ RUN \
     addgroup -S ${DEFAULT_USER} -g ${DEFAULT_USER_UID}; \
     adduser -D -S -G ${DEFAULT_USER} -u ${DEFAULT_USER_UID} -s /bin/bash ${DEFAULT_USER};
 
+WORKDIR /app
 USER ${DEFAULT_USER}
 
-FROM final AS test
+FROM final-${TEST_TARGET} AS test
+
 COPY tests/ /tests
+USER 0
 WORKDIR /tests
 # Make sure all envplate substitutions are executed before
 # running tests.
-RUN /entrypoints/20-prepare-nginx.sh && \
+RUN printenv && /entrypoints/20-prepare-nginx.sh && \
     composer install && \
-    vendor/bin/phpunit
+    vendor/bin/phpunit --testsuite shared && \
+    vendor/bin/phpunit --testsuite $TESTSUITE
