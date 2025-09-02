@@ -27,5 +27,5 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Run tests
-        working-directory: openshift/drupal
+        working-directory: drupal
         run: make test-php
