@@ -28,4 +28,4 @@ jobs:
 
       - name: Run tests
         working-directory: drupal
-        run: make test-php
+        run: make test

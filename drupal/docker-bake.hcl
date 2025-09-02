@@ -96,24 +96,24 @@ target "drupal-web" {
   target = "final-drupal-web"
 }
 
-target "web-php83-dev" {
-  inherits = ["drupal-web", "php83-common"]
-  tags = ["${REPO_WEB}:8.3-dev"]
-}
-
 target "web-php83" {
   inherits = ["php83-common", "drupal-web"]
   tags = ["${REPO_WEB}:8.3"]
 }
 
-target "web-php84-dev" {
-  inherits = ["drupal-web", "php84-common"]
-  tags = ["${REPO_WEB}:8.4-dev"]
+target "web-php83-dev" {
+  inherits = ["web-php83"]
+  tags = ["${REPO_WEB}:8.3-dev"]
 }
 
 target "web-php84" {
-  inherits = ["drupal-web", "php84-common"]
+  inherits = ["php84-common", "drupal-web"]
   tags = ["${REPO_WEB}:8.4"]
+}
+
+target "web-php84-dev" {
+  inherits = ["web-php84"]
+  tags = ["${REPO_WEB}:8.4-dev"]
 }
 
 # Drupal web image tests

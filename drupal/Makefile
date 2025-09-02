@@ -4,11 +4,14 @@ PHONY += help
 help:
 	@echo -e "See README.md for usage"
 
-###########
-#   all   #
-###########
-PHONY += all
-all: push-php-dev push-php
+PHONY += push-prod
+push-prod: push-php push-php-web
+
+PHONY += push-dev
+push-dev: push-php-dev push-php-web-dev
+
+PHONY += test
+test: test-php test-php-web
 
 ###########
 # php-dev #
@@ -19,8 +22,11 @@ push-php-dev: push-php83-dev push-php84-dev
 PHONY += test-php-dev
 test-php-dev: test-php83-dev test-php84-dev
 
-PHONY += test-web-dev
-test-web-dev: test-php83-web-dev test-php84-web-dev
+PHONY += test-php-web-dev
+test-php-web-dev: test-php83-web-dev test-php84-web-dev
+
+PHONY += push-php-web-dev
+push-php-web-dev: push-php83-web-dev push-php84-web-dev
 
 #######
 # php #
@@ -31,6 +37,13 @@ test-php: test-php83 test-php84
 PHONY += push-php
 push-php: push-php83 push-php84
 
+
+PHONY += test-php-web
+test-php-web: test-php83-web test-php84-web
+
+PHONY += push-php-web
+push-php-web: push-php83-web push-php84-web
+
 ###########
 # 8.3-dev #
 ###########
@@ -39,7 +52,7 @@ test-php83-dev:
 	$(call run_tests,test-php83)
 
 PHONY += push-php83-dev
-push-php83-dev:
+push-php83-dev: test-php83-dev
 	$(call build_image,php83-dev)
 
 PHONY += test-php83-web-dev
@@ -47,7 +60,7 @@ test-php83-web-dev:
 	$(call run_tests,drupal-web-test-php83)
 
 PHONY += push-php83-web-dev
-push-php83-web-dev:
+push-php83-web-dev: test-php83-web-dev
 	$(call build_image,web-php83-dev)
 
 #######
