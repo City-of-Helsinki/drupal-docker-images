@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Shared;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class InstalledPackagesTest extends TestCase {
+class InstalledPackagesTest extends TestBase {
 
   #[DataProvider(methodName: 'expectedPackages')]
   public function testPackages(string $packageName) : void {

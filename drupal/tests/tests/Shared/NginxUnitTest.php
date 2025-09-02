@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Shared;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class NginxUnitTest extends TestCase {
+class NginxUnitTest extends TestBase {
 
   #[DataProvider(methodName: 'configNames')]
   public function testConfigExists(string $conf) : void {

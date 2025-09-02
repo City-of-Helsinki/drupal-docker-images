@@ -2,7 +2,7 @@
 
 Based on [City-of-Helsinki/drupal-docker-base](/openshift/drupal) image with a few additions:
 
-- [OpenShift origin client (OC)](/local/oc)
+- [OpenShift origin client (OC)](/oc)
 - Xdebug
 
 Available PHP versions: `8.3`, `8.4`:

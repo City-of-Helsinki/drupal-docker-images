@@ -12,7 +12,7 @@ Contains production Docker images for Drupal.
 
 See:
 - [City-of-Helsinki/drupal-helfi-platform/documentation/openshift.md](https://github.com/City-of-Helsinki/drupal-helfi-platform/blob/main/documentation/openshift.md) for documentation on how to use this image in your own project.
-- [openshift/drupal/README.md](openshift/drupal/README.md) for developer documentation.
+- [drupal/README.md](drupal) for developer documentation.
 
 Available PHP versions: `8.3`, `8.4`:
 
@@ -23,7 +23,7 @@ Available PHP versions: `8.3`, `8.4`:
 
 Based on [City-of-Helsinki/drupal-docker-base](/openshift/drupal) with some additions.
 
-See [local/drupal/README.md](local/drupal/README.md) for documentation.
+See [drupal/README.md](drupal) for documentation.
 
 Available PHP versions: `8.3`, `8.4`:
 
@@ -34,7 +34,7 @@ Available PHP versions: `8.3`, `8.4`:
 
 Docker image used to run [City-of-Helsinki/drupal-repository](https://github.com/City-of-Helsinki/drupal-repository).
 
-See [openshift/drupal-repository](openshift/drupal-repository) for more documentation.
+See [drupal-repository](drupal-repository) for more documentation.
 
 ## Contact
 

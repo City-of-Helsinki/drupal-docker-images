@@ -2,22 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Shared;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
-class PhpTest extends TestCase {
-
-  protected string $shortVersion;
-  protected string $phpVersion;
-
-  protected function setUp(): void {
-    $this->shortVersion = getenv('PHP_SHORT_VERSION');
-    $this->phpVersion = getenv('PHP_VERSION');
-    $this->assertNotEmpty($this->shortVersion);
-    $this->assertNotEmpty($this->phpVersion);
-  }
+class PhpTest extends TestBase {
 
   #[DataProvider(methodName: 'extensionNames')]
   public function testExtension(string $extension) : void {
@@ -45,7 +34,7 @@ class PhpTest extends TestCase {
 
   public function testPhpVersion() {
     $actual = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
-    $this->assertTrue(version_compare($this->phpVersion, $actual, 'eq'));
+    $this->assertTrue(version_compare(static::$phpVersion, $actual, 'eq'));
   }
 
 }
