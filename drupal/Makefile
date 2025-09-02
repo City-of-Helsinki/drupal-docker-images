@@ -121,7 +121,7 @@ push-php84-web: test-php84-web
 	$(call build_image,web-php84)
 
 define run_tests
-	docker buildx bake --no-cache $(1)
+	docker buildx bake $(1)
 endef
 
 define build_image
