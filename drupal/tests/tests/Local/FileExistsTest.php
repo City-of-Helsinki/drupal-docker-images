@@ -15,9 +15,9 @@ class FileExistsTest extends \Tests\Shared\FileExistsTest {
       ['/usr/local/bin/drush', TRUE],
       ['/entrypoints/00-umask.sh', TRUE],
       ['/entrypoints/15-xdebug.sh', TRUE],
-      ['/etc/php' . static::$phpVersion . '/conf.d/xdebug.ini', TRUE],
+      ['/etc/php' . static::getPhpShortVersion() . '/conf.d/xdebug.ini', TRUE],
       // Opcache optimizations should not exist.
-      ['/etc/php' . static::$phpVersion . '/conf.d/opcache-recommended.ini', FALSE],
+      ['/etc/php' . static::getPhpShortVersion() . '/conf.d/opcache-recommended.ini', FALSE],
     ];
   }
 

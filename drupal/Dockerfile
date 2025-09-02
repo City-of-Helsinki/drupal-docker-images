@@ -172,7 +172,7 @@ RUN { \
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY openshift/php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 
-FROM php83 AS drupal-web-php83
+FROM final-php AS drupal-web-php83
 RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -182,7 +182,7 @@ RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testi
 
 COPY local/files/etc/php /etc/php83
 
-FROM php84 AS drupal-web-php84
+FROM final-php AS drupal-web-php84
 RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -214,6 +214,9 @@ COPY local/files/ /
 RUN chmod +x /entrypoints/* \
     # Drush binary is needed in CI.
     /usr/local/bin/drush
+
+# Remove OPCache optimizations since they hinder development.
+RUN rm /etc/php*/conf.d/opcache-recommended.ini
 
 # Generate a self-signed cert for nginx. We use selenium+chromium to run
 # Functional javascript tests and it forces all requests to use https now.
