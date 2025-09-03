@@ -1,4 +1,6 @@
-# OpenShift Drupal base images
+# Drupal base images
+
+## OpenShift
 
 Supported PHP versions: `8.3`, `8.4`:
 
@@ -7,38 +9,62 @@ Supported PHP versions: `8.3`, `8.4`:
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.4-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.4`
 
-Testing environment uses `*-dev` images by default, and it's highly recommended to push changes to `*-dev` tag first and test them on testing environment before pushing them into production (`8.0` tag for example).
+## Local / CI
+
+Supported PHP versions: `8.3`, `8.4`:
+
+- `ghcr.io/city-of-helsinki/drupal-web:8.3-dev`
+- `ghcr.io/city-of-helsinki/drupal-web:8.3`
+- `ghcr.io/city-of-helsinki/drupal-web:8.4-dev`
+- `ghcr.io/city-of-helsinki/drupal-web:8.4`
 
 ## Development
 
-### Requirements
+Make sure you're logged in to `ghcr.io` Docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
 
-- [docker/buildx](https://github.com/docker/buildx) (most likely already included by default)
+See [Makefile](Makefile) for up-to-date build commands.
 
-### Building
+### Build & Push
 
-To build a specific image, call:
+```bash
+# Build and push all images 
+make push-prod
+# Build and push drupal-docker-base images
+make push-php
+# Build and push drupal-web images
+make push-php-web
+# Build and push a specific version of drupal-docker-base image
+make push-php84
+# Build and push a specific version of drupal-web image
+make push-php84-web
 
-- `8.4-dev` tag: `make push-php84-dev`
-- `8.4` tag: `make push-php84`
-
-You can also build all tags at once: `make push-php-dev` (builds all `*-dev` tags) or `make push-php` (builds stable tags).
+# Build and push a development version of drupal-docker-base images
+make push-php-dev
+# Build and push a development version of drupal-web-images
+make push-php-web-dev
+# Build and push a development version of drupal-docker-base images
+make push-php84-dev
+# Build and push a specific version of drupal-web development image
+make push-php84-web-dev
+```
 
 ### Testing
 
-- Run tests against `8.4-dev` tag: `make test-php84-dev`
-- Run tests against `8.4` tag: `make test-php84`
+We use `phpunit` to verify images are built correctly. See [tests/](tests/) for available tests.
+
+#### Run tests
+
+```bash
+# Test all images
+make test
+# Test drupal-docker-base images
+make test-php
+# Test drupal-web images
+make test-php-web
+```
 
 ### Release process
 
-Make sure you're logged in to `ghcr.io` Docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
+You can either build and push images manually, or build images using GitHub Actions.
 
-Call `make push-php` or `make push-php-dev` to:
-- Build all PHP versions at once
-- Run all tests
-- Push all built images to Docker repository
-
-You can also release a specific tag by:
-
-- `make push-php84-dev`: Build, tests and push the `8.4-dev` tag
-- `make push-php84`: Builds, tests and push the `8.4` tag
+Go to `Actions` -> `drupal-build.yml` -> Click "Run workflow" -> Select an environment -> Run workflow.
