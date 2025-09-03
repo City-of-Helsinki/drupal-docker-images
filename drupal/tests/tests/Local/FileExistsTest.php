@@ -8,8 +8,8 @@ class FileExistsTest extends \Tests\Shared\FileExistsTest {
 
   public static function fileData() : array {
     return [
-      ['/etc/ssl/certs/cert.crt', TRUE],
-      ['/etc/ssl/private/cert.key', TRUE],
+      ['/etc/nginx/certs/cert.crt', TRUE],
+      ['/etc/nginx/certs/cert.key', TRUE],
       ['/etc/my.cnf.d/client.cnf', TRUE],
       ['/etc/nginx/http.d/ssl-proxy.conf', TRUE],
       ['/usr/local/bin/drush', TRUE],

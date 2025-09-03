@@ -224,13 +224,14 @@ RUN rm /etc/php*/conf.d/opcache-recommended.ini
 # We have a nginx config with a self-signed cert to proxy https requests
 # to 8080 port.
 # @see files/etc/nginx/http.d/ssl-proxy.conf
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
-  -keyout /etc/nginx/certs/cert.key \
-  -out /etc/ssl/certs/cert.crt
-
-RUN chmod a+r /etc/nginx/certs/cert.crt \
-    /etc/nginx/nginx/cert.key
+RUN \
+  mkdir -p /etc/nginx/certs && \
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
+    -keyout /etc/nginx/certs/cert.key \
+    -out /etc/nginx/certs/cert.crt && \
+  chmod a+r /etc/nginx/certs/cert.crt \
+    /etc/nginx/certs/cert.key
 
 ENV DEFAULT_USER=app \
     DEFAULT_USER_UID=1000
