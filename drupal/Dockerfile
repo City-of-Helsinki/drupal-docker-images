@@ -4,7 +4,6 @@ ARG ALPINE_VERSION=3.22
 
 FROM alpine:${ALPINE_VERSION} AS base
 
-# Install required tools (https://docs.acquia.com/blt/install/)
 RUN set -eux; \
     apk update && apk upgrade && \
     apk add --no-cache git \
@@ -28,7 +27,7 @@ RUN set -eux; \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
-# Fetch the required certificates for the Azure MariaDB service and combine them
+# Fetch the required certificates for the Azure MySQL service and combine them
 ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
 RUN \
   mkdir -p /usr/local/share/ca-certificates && \
