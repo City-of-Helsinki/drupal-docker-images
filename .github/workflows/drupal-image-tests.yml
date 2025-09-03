@@ -10,6 +10,7 @@ on:
       - '!**.md'
       - 'drupal/**'
       - '.github/workflows/drupal-image-tests.yml'
+name: Drupal image tests
 jobs:
   drupal-tests:
     name: Drupal image tests

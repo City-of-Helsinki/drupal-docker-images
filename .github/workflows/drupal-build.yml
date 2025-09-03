@@ -7,9 +7,10 @@ on:
         options:
           - dev
           - prod
+name: Build Drupal images
 jobs:
-  build-openshift-drupal:
-    name: Build OpenShift Drupal image
+  build-drupal-images:
+    name: Build Drupal images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
