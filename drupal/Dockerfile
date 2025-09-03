@@ -226,11 +226,11 @@ RUN rm /etc/php*/conf.d/opcache-recommended.ini
 # @see files/etc/nginx/http.d/ssl-proxy.conf
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/C=FI/ST=Uusimaa/L=Helsinki" \
-  -keyout /etc/ssl/private/cert.key \
+  -keyout /etc/nginx/certs/cert.key \
   -out /etc/ssl/certs/cert.crt
 
-RUN chmod a+r /etc/ssl/certs/cert.crt \
-    /etc/ssl/private/cert.key
+RUN chmod a+r /etc/nginx/certs/cert.crt \
+    /etc/nginx/nginx/cert.key
 
 ENV DEFAULT_USER=app \
     DEFAULT_USER_UID=1000
