@@ -53,8 +53,8 @@ target "php83-common" {
 target "php84-common" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.3"
-    PHP_SHORT_VERSION = "83"
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
   }
 }
 
