@@ -27,17 +27,7 @@ RUN set -eux; \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
 
-# Fetch the required certificates for the Azure MySQL service and combine them
-ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/DigiCertGlobalRootCA.crt.pem
-RUN mkdir -p /usr/local/share/ca-certificates && \
-    wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O $AZURE_SQL_SSL_CA_PATH
-
-ENV AZURE_SQL_SSL_CA_PATH=/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem
-RUN wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem -O /tmp/baltimore.crt.pem && \
-  wget https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem -O /tmp/g2.crt.pem && \
-  cat /tmp/g2.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
-  cat /tmp/baltimore.crt.pem >> $AZURE_SQL_SSL_CA_PATH && \
-  rm /tmp/*.crt.pem
+ENV AZURE_SQL_SSL_CA_PATH=/etc/ssl/certs/ca-certificates.crt
 
 # Expose nginx
 EXPOSE 8080
