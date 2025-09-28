@@ -25,7 +25,7 @@ COPY --chmod=744 xdg-open db-sync /usr/local/bin/
 RUN \
   apt-get update && \
   apt-get install -y --no-install-recommends \
-    rsync; \
+    rsync libkrb5; \
   rm -rf /var/lib/apt/lists/*
 
 # Copy the oc binary from builder
