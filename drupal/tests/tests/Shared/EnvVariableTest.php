@@ -16,7 +16,7 @@ class EnvVariableTest extends TestBase {
   public static function envVariableData() : array {
     return [
       ['PATH', '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/vendor/bin:/var/www/html/vendor/bin'],
-      ['AZURE_SQL_SSL_CA_PATH', '/usr/local/share/ca-certificates/BaltimoreCyberTrustRoot.crt.pem'],
+      ['AZURE_SQL_SSL_CA_PATH', '/etc/ssl/certs/ca-certificates.crt'],
     ];
   }
 
