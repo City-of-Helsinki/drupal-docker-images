@@ -60,12 +60,12 @@ target "php83-common" {
 
 target "php84-dev" {
   inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4-dev", "${REPO_BASE}:latest"]
+  tags = ["${REPO_BASE}:8.4-dev", "${REPO_BASE}:latest-dev"]
 }
 
 target "php84" {
   inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4"]
+  tags = ["${REPO_BASE}:8.4", "${REPO_BASE}:latest"]
 }
 
 target "test-php84" {
@@ -98,12 +98,12 @@ target "drupal-web" {
 
 target "web-php84" {
   inherits = ["php84-common", "drupal-web"]
-  tags = ["${REPO_WEB}:8.4"]
+  tags = ["${REPO_WEB}:8.4", "${REPO_WEB}:latest"]
 }
 
 target "web-php84-dev" {
   inherits = ["web-php84"]
-  tags = ["${REPO_WEB}:8.4-dev", "${REPO_WEB}:latest"]
+  tags = ["${REPO_WEB}:8.4-dev", "${REPO_WEB}:latest-dev"]
 }
 
 
