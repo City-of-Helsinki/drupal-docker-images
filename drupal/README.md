@@ -30,7 +30,7 @@ See [Makefile](Makefile) for up-to-date build commands.
 
 ## Updating PHP version
 
-Make sure to update `latest` tag accordingly in th [docker-bake.hcl](/drupal/docker-bake.hcl) file. The `latest` tag should always point to the development version of the latest supported PHP version, `8.4-dev` for example.
+Make sure to update `latest` and `latest-dev` tags accordingly in th [docker-bake.hcl](/drupal/docker-bake.hcl) file. These tags should always point to the latest supported PHP version, `8.4-dev` or `8.4` for example.
 
 ### Build & Push
 
