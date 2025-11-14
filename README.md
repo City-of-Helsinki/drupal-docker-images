@@ -16,8 +16,8 @@ See:
 
 Available PHP versions: `8.3`, `8.4`:
 
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.4`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
 
 ## Local Drupal docker image
 
@@ -27,8 +27,8 @@ See [drupal/README.md](drupal) for documentation.
 
 Available PHP versions: `8.3`, `8.4`:
 
-- `ghcr.io/city-of-helsinki/drupal-web:8.3`
 - `ghcr.io/city-of-helsinki/drupal-web:8.4`
+- `ghcr.io/city-of-helsinki/drupal-web:8.3`
 
 ## OpenShift Drupal repository image
 

@@ -42,6 +42,14 @@ target "test" {
   target = "test"
 }
 
+target "php84-common" {
+  inherits = ["php"]
+  args = {
+    PHP_VERSION = "8.4"
+    PHP_SHORT_VERSION = "84"
+  }
+}
+
 target "php83-common" {
   inherits = ["php"]
   args = {
@@ -50,12 +58,19 @@ target "php83-common" {
   }
 }
 
-target "php84-common" {
-  inherits = ["php"]
-  args = {
-    PHP_VERSION = "8.4"
-    PHP_SHORT_VERSION = "84"
-  }
+target "php84-dev" {
+  inherits = ["php84-common"]
+  tags = ["${REPO_BASE}:8.4-dev", "${REPO_BASE}:latest-dev"]
+}
+
+target "php84" {
+  inherits = ["php84-common"]
+  tags = ["${REPO_BASE}:8.4", "${REPO_BASE}:latest"]
+}
+
+target "test-php84" {
+  inherits = ["php84", "test"]
+  targets = ["test"]
 }
 
 target "php83-dev" {
@@ -73,21 +88,6 @@ target "test-php83" {
   targets = ["test"]
 }
 
-target "php84-dev" {
-  inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4-dev"]
-}
-
-target "php84" {
-  inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4"]
-}
-
-target "test-php84" {
-  inherits = ["php84", "test"]
-  targets = ["test"]
-}
-
 # Drupal web images (drupal-web)
 target "drupal-web" {
   args = {
@@ -95,6 +95,17 @@ target "drupal-web" {
   }
   target = "final-drupal-web"
 }
+
+target "web-php84" {
+  inherits = ["php84-common", "drupal-web"]
+  tags = ["${REPO_WEB}:8.4", "${REPO_WEB}:latest"]
+}
+
+target "web-php84-dev" {
+  inherits = ["web-php84"]
+  tags = ["${REPO_WEB}:8.4-dev", "${REPO_WEB}:latest-dev"]
+}
+
 
 target "web-php83" {
   inherits = ["php83-common", "drupal-web"]
@@ -104,16 +115,6 @@ target "web-php83" {
 target "web-php83-dev" {
   inherits = ["web-php83"]
   tags = ["${REPO_WEB}:8.3-dev"]
-}
-
-target "web-php84" {
-  inherits = ["php84-common", "drupal-web"]
-  tags = ["${REPO_WEB}:8.4"]
-}
-
-target "web-php84-dev" {
-  inherits = ["web-php84"]
-  tags = ["${REPO_WEB}:8.4-dev"]
 }
 
 # Drupal web image tests

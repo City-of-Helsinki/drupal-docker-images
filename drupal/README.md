@@ -4,25 +4,33 @@
 
 Supported PHP versions: `8.3`, `8.4`:
 
+- `ghcr.io/city-of-helsinki/drupal-docker-base:latest-dev` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.4-dev`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:latest` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.4`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.3-dev`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.4-dev`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.4`
 
 ## Local / CI
 
 Supported PHP versions: `8.3`, `8.4`:
 
+- `ghcr.io/city-of-helsinki/drupal-web:latest-dev` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-web:8.4-dev`
+- `ghcr.io/city-of-helsinki/drupal-web:latest` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-web:8.4`
 - `ghcr.io/city-of-helsinki/drupal-web:8.3-dev`
 - `ghcr.io/city-of-helsinki/drupal-web:8.3`
-- `ghcr.io/city-of-helsinki/drupal-web:8.4-dev`
-- `ghcr.io/city-of-helsinki/drupal-web:8.4`
 
 ## Development
 
 Make sure you're logged in to `ghcr.io` Docker repository: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry
 
 See [Makefile](Makefile) for up-to-date build commands.
+
+## Updating PHP version
+
+Make sure to update `latest` and `latest-dev` tags accordingly in th [docker-bake.hcl](/drupal/docker-bake.hcl) file. These tags should always point to the latest supported PHP version, `8.4-dev` or `8.4` for example.
 
 ### Build & Push
 
