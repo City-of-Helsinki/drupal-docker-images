@@ -10,6 +10,10 @@ class EnvVariableTest extends \Tests\Shared\EnvVariableTest {
     $this->assertNotEmpty(getenv('SIMPLETEST_DB'));
   }
 
+  public function testPhpInstallVersion() : void {
+    $this->assertNotEmpty(getenv('PHP_INSTALL_VERSION'));
+  }
+
   public static function envVariableData() : array {
     return [
       ['DRUPAL_DB_NAME', 'drupal'],
