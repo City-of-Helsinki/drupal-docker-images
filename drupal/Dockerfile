@@ -69,7 +69,7 @@ CMD ["entrypoint"]
 
 FROM base AS php83
 
-ENV PHP_VERSION=8.3
+ENV PHP_VERSION=8.3 PHP_INSTALL_VERSION=83
 RUN set -eux; \
     apk --no-cache add \
     php83-pear \
@@ -104,7 +104,7 @@ RUN set -eux; \
 
 FROM base AS php84
 
-ENV PHP_VERSION=8.4
+ENV PHP_VERSION=8.4 PHP_INSTALL_VERSION=84
 RUN set -eux; \
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     php84-pear \
@@ -228,6 +228,10 @@ ENV DEFAULT_USER=app \
 RUN \
     addgroup -S ${DEFAULT_USER} -g ${DEFAULT_USER_UID}; \
     adduser -D -S -G ${DEFAULT_USER} -u ${DEFAULT_USER_UID} -s /bin/bash ${DEFAULT_USER};
+
+RUN \
+   # Make sure the default user has permission to rename xdebug.ini file.
+   chown ${DEFAULT_USER}:${DEFAULT_USER} /etc/php*/conf.d -R
 
 WORKDIR /app
 USER ${DEFAULT_USER}
