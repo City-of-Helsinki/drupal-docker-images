@@ -168,6 +168,7 @@ RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testi
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php83-pdo_sqlite \
     php83-pecl-xdebug \
     php83-pecl-pcov
 
@@ -178,6 +179,7 @@ RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testi
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
+    php84-pdo_sqlite \
     php84-pecl-xdebug \
     php84-pecl-pcov
 

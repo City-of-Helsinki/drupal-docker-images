@@ -8,6 +8,7 @@ class PhpTest extends \Tests\Shared\PhpTest {
 
   public static function extensionNames() : array {
     return [
+      ['pdo_sqlite'],
       ['pcov'],
     ];
   }
