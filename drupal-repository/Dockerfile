@@ -1,10 +1,10 @@
-FROM alpine:3.22
+FROM alpine:3.23
 
 COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 EXPOSE 9000
 
 # We need php and git to build satis.
-RUN apk add --no-cache git php83 php83-openssl php83-common php83-json php83-phar php83-mbstring php83-pecl-apcu php83-zip php83-simplexml make tini
+RUN apk add --no-cache git php84 php84-openssl php84-common php84-json php84-phar php84-mbstring php84-pecl-apcu php84-zip php84-simplexml make tini
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
