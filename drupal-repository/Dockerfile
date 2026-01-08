@@ -4,7 +4,19 @@ COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 EXPOSE 9000
 
 # We need php and git to build satis.
-RUN apk add --no-cache git php84 php84-openssl php84-common php84-json php84-phar php84-mbstring php84-pecl-apcu php84-zip php84-simplexml make tini
+RUN apk add --no-cache git \
+  make \
+  tini \
+  php84 \
+  php84-openssl \
+  php84-common \
+  php84-json \
+  php84-phar \
+  php84-mbstring \
+  php84-pecl-apcu \
+  php84-zip \
+  php84-simplexml \
+  php84-iconv
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
