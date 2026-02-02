@@ -1,6 +1,6 @@
 ARG PHP_SHORT_VERSION=84
 ARG TEST_TARGET=php
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 
 FROM alpine:${ALPINE_VERSION} AS base
 
@@ -67,40 +67,39 @@ ENTRYPOINT ["/sbin/tini", "--"]
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
 
-FROM base AS php83
+FROM base AS php85
 
-ENV PHP_VERSION=8.3 PHP_INSTALL_VERSION=83
+ENV PHP_VERSION=8.5 PHP_INSTALL_VERSION=85
 RUN set -eux; \
     apk --no-cache add \
-    php83-pear \
-    php83-fpm \
-    php83-curl \
-    php83-fileinfo \
-    php83-iconv \
-    php83-mbstring \
-    php83-opcache \
-    php83-openssl \
-    php83-phar \
-    php83-session \
-    php83-zip \
-    php83-dom \
-    php83-pdo \
-    php83-pdo_mysql \
-    php83-tokenizer \
-    php83-xmlreader \
-    php83-xmlwriter \
-    php83-simplexml \
-    php83-sockets \
-    php83-ctype \
-    php83-gd \
-    php83-sodium \
-    php83-bcmath \
-    php83-pecl-apcu \
-    php83-pecl-redis; \
+    php85-pear \
+    php85-fpm \
+    php85-curl \
+    php85-fileinfo \
+    php85-iconv \
+    php85-mbstring \
+    php85-openssl \
+    php85-phar \
+    php85-session \
+    php85-zip \
+    php85-dom \
+    php85-pdo \
+    php85-pdo_mysql \
+    php85-tokenizer \
+    php85-xmlreader \
+    php85-xmlwriter \
+    php85-simplexml \
+    php85-sockets \
+    php85-ctype \
+    php85-gd \
+    php85-sodium \
+    php85-bcmath \
+    php85-pecl-apcu \
+    php85-pecl-redis; \
     apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main add \
-    php83-pecl-imagick; \
-    ln -sfn /usr/bin/php83 /usr/bin/php && \
-    ln -sfn /usr/sbin/php-fpm83 /usr/bin/php-fpm;
+    php85-pecl-imagick; \
+    ln -sfn /usr/bin/php85 /usr/bin/php && \
+    ln -sfn /usr/sbin/php-fpm85 /usr/bin/php-fpm;
 
 FROM base AS php84
 
@@ -163,15 +162,15 @@ RUN { \
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY openshift/php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
 
-FROM final-php AS drupal-web-php83
+FROM final-php AS drupal-web-php85
 RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main  \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository=https://dl-cdn.alpinelinux.org/alpine/edge/releases add \
-    php83-pecl-xdebug \
-    php83-pecl-pcov
+    php85-pecl-xdebug \
+    php85-pecl-pcov
 
-COPY local/files/etc/php /etc/php83
+COPY local/files/etc/php /etc/php85
 
 FROM final-php AS drupal-web-php84
 RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
