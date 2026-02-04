@@ -7,19 +7,19 @@ variable "REPO_WEB" {
 }
 
 group "php-dev" {
-  targets = ["php83-dev", "php84-dev"]
+  targets = ["php85-dev", "php84-dev"]
 }
 
 group "php-prod" {
-  targets = ["php83", "php84"]
+  targets = ["php85", "php84"]
 }
 
 group "drupal-web-prod" {
-  targets = ["web-php83", "web-php84"]
+  targets = ["web-php85", "web-php84"]
 }
 
 group "drupal-web-dev" {
-  targets = ["web-php83-dev", "web-php84-dev"]
+  targets = ["web-php85-dev", "web-php84-dev"]
 }
 
 target "php" {
@@ -50,11 +50,11 @@ target "php84-common" {
   }
 }
 
-target "php83-common" {
+target "php85-common" {
   inherits = ["php"]
   args = {
-    PHP_VERSION = "8.3"
-    PHP_SHORT_VERSION = "83"
+    PHP_VERSION = "8.5"
+    PHP_SHORT_VERSION = "85"
   }
 }
 
@@ -73,18 +73,18 @@ target "test-php84" {
   targets = ["test"]
 }
 
-target "php83-dev" {
-  inherits = ["php83-common"]
-  tags = ["${REPO_BASE}:8.3-dev"]
+target "php85-dev" {
+  inherits = ["php85-common"]
+  tags = ["${REPO_BASE}:8.5-dev"]
 }
 
-target "php83" {
-  inherits = ["php83-common"]
-  tags = ["${REPO_BASE}:8.3"]
+target "php85" {
+  inherits = ["php85-common"]
+  tags = ["${REPO_BASE}:8.5"]
 }
 
-target "test-php83" {
-  inherits = ["php83", "test"]
+target "test-php85" {
+  inherits = ["php85", "test"]
   targets = ["test"]
 }
 
@@ -107,19 +107,19 @@ target "web-php84-dev" {
 }
 
 
-target "web-php83" {
-  inherits = ["php83-common", "drupal-web"]
-  tags = ["${REPO_WEB}:8.3"]
+target "web-php85" {
+  inherits = ["php85-common", "drupal-web"]
+  tags = ["${REPO_WEB}:8.5"]
 }
 
-target "web-php83-dev" {
-  inherits = ["web-php83"]
-  tags = ["${REPO_WEB}:8.3-dev"]
+target "web-php85-dev" {
+  inherits = ["web-php85"]
+  tags = ["${REPO_WEB}:8.5-dev"]
 }
 
 # Drupal web image tests
-target "drupal-web-test-php83" {
-  inherits = ["web-php83", "test"]
+target "drupal-web-test-php85" {
+  inherits = ["web-php85", "test"]
   targets = ["test"]
 }
 
