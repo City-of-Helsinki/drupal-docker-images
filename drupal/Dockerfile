@@ -43,6 +43,9 @@ RUN chmod +x /entrypoints/* && \
 ENV PATH=${PATH}:/app/vendor/bin:/var/www/html/vendor/bin
 ENV COMPOSER_HOME=/.composer
 ENV ENV="/etc/profile"
+# We use this to detect if we're running the command inside
+# a container.
+ENV CONTAINER_RUNNING=true
 
 RUN \
   # Create private files folder
