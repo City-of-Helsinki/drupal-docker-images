@@ -60,12 +60,12 @@ target "php85-common" {
 
 target "php84-dev" {
   inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4-dev", "${REPO_BASE}:latest-dev"]
+  tags = ["${REPO_BASE}:8.4-dev"]
 }
 
 target "php84" {
   inherits = ["php84-common"]
-  tags = ["${REPO_BASE}:8.4", "${REPO_BASE}:latest"]
+  tags = ["${REPO_BASE}:8.4"]
 }
 
 target "test-php84" {
@@ -75,12 +75,12 @@ target "test-php84" {
 
 target "php85-dev" {
   inherits = ["php85-common"]
-  tags = ["${REPO_BASE}:8.5-dev"]
+  tags = ["${REPO_BASE}:8.5-dev", "${REPO_BASE}:latest-dev"]
 }
 
 target "php85" {
   inherits = ["php85-common"]
-  tags = ["${REPO_BASE}:8.5"]
+  tags = ["${REPO_BASE}:8.5", "${REPO_BASE}:latest"]
 }
 
 target "test-php85" {
@@ -98,23 +98,23 @@ target "drupal-web" {
 
 target "web-php84" {
   inherits = ["php84-common", "drupal-web"]
-  tags = ["${REPO_WEB}:8.4", "${REPO_WEB}:latest"]
+  tags = ["${REPO_WEB}:8.4"]
 }
 
 target "web-php84-dev" {
   inherits = ["web-php84"]
-  tags = ["${REPO_WEB}:8.4-dev", "${REPO_WEB}:latest-dev"]
+  tags = ["${REPO_WEB}:8.4-dev"]
 }
 
 
 target "web-php85" {
   inherits = ["php85-common", "drupal-web"]
-  tags = ["${REPO_WEB}:8.5"]
+  tags = ["${REPO_WEB}:8.5",  "${REPO_WEB}:latest"]
 }
 
 target "web-php85-dev" {
   inherits = ["web-php85"]
-  tags = ["${REPO_WEB}:8.5-dev"]
+  tags = ["${REPO_WEB}:8.5-dev", "${REPO_WEB}:latest-dev"]
 }
 
 # Drupal web image tests

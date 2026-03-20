@@ -2,25 +2,25 @@
 
 ## OpenShift
 
-Supported PHP versions: `8.3`, `8.4`:
+Supported PHP versions: `8.5`, `8.4`:
 
-- `ghcr.io/city-of-helsinki/drupal-docker-base:latest-dev` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-docker-base:latest-dev` (PHP 8.5)
+- `ghcr.io/city-of-helsinki/drupal-docker-base:latest` (PHP 8.5)
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.5-dev`
+- `ghcr.io/city-of-helsinki/drupal-docker-base:8.5`
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.4-dev`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:latest` (PHP 8.4)
 - `ghcr.io/city-of-helsinki/drupal-docker-base:8.4`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3-dev`
-- `ghcr.io/city-of-helsinki/drupal-docker-base:8.3`
 
 ## Local / CI
 
-Supported PHP versions: `8.3`, `8.4`:
+Supported PHP versions: `8.5`, `8.4`:
 
-- `ghcr.io/city-of-helsinki/drupal-web:latest-dev` (PHP 8.4)
+- `ghcr.io/city-of-helsinki/drupal-web:latest-dev` (PHP 8.5)
+- `ghcr.io/city-of-helsinki/drupal-web:8.5-dev`
+- `ghcr.io/city-of-helsinki/drupal-web:latest` (PHP 8.5)
+- `ghcr.io/city-of-helsinki/drupal-web:8.5`
 - `ghcr.io/city-of-helsinki/drupal-web:8.4-dev`
-- `ghcr.io/city-of-helsinki/drupal-web:latest` (PHP 8.4)
 - `ghcr.io/city-of-helsinki/drupal-web:8.4`
-- `ghcr.io/city-of-helsinki/drupal-web:8.3-dev`
-- `ghcr.io/city-of-helsinki/drupal-web:8.3`
 
 ## Development
 
@@ -35,7 +35,7 @@ Make sure to update `latest` and `latest-dev` tags accordingly in th [docker-bak
 ### Build & Push
 
 ```bash
-# Build and push all images 
+# Build and push all images
 make push-prod
 # Build and push drupal-docker-base images
 make push-php
