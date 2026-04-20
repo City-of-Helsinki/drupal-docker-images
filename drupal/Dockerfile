@@ -84,6 +84,7 @@ RUN set -eux; \
     php85-openssl \
     php85-phar \
     php85-session \
+    php85-pecl-igbinary \
     php85-zip \
     php85-dom \
     php85-pdo \
@@ -119,6 +120,7 @@ RUN set -eux; \
     php84-openssl \
     php84-phar \
     php84-session \
+    php85-pecl-igbinary \
     php84-sockets \
     php84-zip \
     php84-dom \
