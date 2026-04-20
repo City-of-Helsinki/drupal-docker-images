@@ -16,6 +16,7 @@ class PhpTest extends TestBase {
   public static function extensionNames() : array {
     return [
       ['json'],
+      ['igbinary'],
       ['apcu'],
       ['curl'],
       ['mbstring'],
