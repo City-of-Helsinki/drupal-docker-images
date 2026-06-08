@@ -20,10 +20,15 @@ RUN apk add --no-cache git \
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
+ENV COMPOSER_CACHE_DIR=/tmp
+
 WORKDIR $PROJECT_DIR
+
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 RUN \
   # Make sure composer cache directory is writable.
+  mkdir -p $COMPOSER_CACHE_DIR/repo/github.com -p && \
+  chmod -R a+rwx $COMPOSER_CACHE_DIR && \
   mkdir -p $COMPOSER_HOME/cache && \
   chmod -R a+rwx $COMPOSER_HOME
 
