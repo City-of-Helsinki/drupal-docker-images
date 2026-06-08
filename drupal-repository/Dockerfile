@@ -29,7 +29,7 @@ RUN \
   # Make sure composer cache directory is writable.
   mkdir -p $COMPOSER_CACHE_DIR/repo/github.com -p && \
   chmod -R a+rwx $COMPOSER_CACHE_DIR && \
-  mkdir -p $COMPOSER_HOME/cache && \
+  mkdir -p $COMPOSER_HOME && \
   chmod -R a+rwx $COMPOSER_HOME
 
 # Copy configuration files and scripts
