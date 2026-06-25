@@ -13,6 +13,16 @@ class PhpTest extends TestBase {
     $this->assertTrue(extension_loaded($extension));
   }
 
+  public function testIgBinary() : void {
+    $file = sprintf('/etc/php%s%s/conf.d/10_igbinary.ini', PHP_MAJOR_VERSION, PHP_MINOR_VERSION);
+
+    $this->assertTrue(file_exists($file));
+    $contents = file_get_contents($file);
+
+    // Make sure igbinary is the default apc serializer.
+    $this->assertStringContainsString('apc.serializer=igbinary', $contents);
+  }
+
   public static function extensionNames() : array {
     return [
       ['json'],

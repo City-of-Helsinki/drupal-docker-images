@@ -120,7 +120,7 @@ RUN set -eux; \
     php84-openssl \
     php84-phar \
     php84-session \
-    php85-pecl-igbinary \
+    php84-pecl-igbinary \
     php84-sockets \
     php84-zip \
     php84-dom \
@@ -163,6 +163,12 @@ RUN { \
   echo 'realpath_cache_size=8M'; \
   echo 'apc.shm_size=64M'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
+
+# Enable and set igbinary as default apc serializer.
+RUN { \
+  echo 'extension=igbinary'; \
+  echo 'apc.serializer=igbinary'; \
+} > /etc/php${PHP_SHORT_VERSION}/conf.d/10_igbinary.ini
 
 # Override default fpm pool conf to run nginx and php-fpm as same user.
 COPY openshift/php-fpm-pool.conf /etc/php${PHP_SHORT_VERSION}/php-fpm.d/www.conf
