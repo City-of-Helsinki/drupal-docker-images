@@ -11,6 +11,7 @@ RUN set -eux; \
     patch \
     rsync \
     bash \
+    imagemagick-heic \
     mariadb-client \
     # This is required by MySQL 8 (caching_sha2_password plugin)
     mariadb-connector-c \
