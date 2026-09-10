@@ -7,16 +7,16 @@ EXPOSE 9000
 RUN apk add --no-cache git \
   make \
   tini \
-  php84 \
-  php84-openssl \
-  php84-common \
-  php84-json \
-  php84-phar \
-  php84-mbstring \
-  php84-pecl-apcu \
-  php84-zip \
-  php84-simplexml \
-  php84-iconv
+  php85 \
+  php85-openssl \
+  php85-common \
+  php85-json \
+  php85-phar \
+  php85-mbstring \
+  php85-pecl-apcu \
+  php85-zip \
+  php85-simplexml \
+  php85-iconv
 
 ENV COMPOSER_HOME=/.composer
 ENV PROJECT_DIR=/var/www/html
