@@ -220,6 +220,11 @@ RUN chmod +x /entrypoints/* \
 # Remove OPCache optimizations since they hinder development.
 RUN rm /etc/php*/conf.d/opcache-recommended.ini
 
+# Local development does not need one nginx worker per CPU core.
+# Patched here so the production image keeps `worker_processes auto`.
+RUN sed -i 's/^worker_processes .*/worker_processes 4;/' /etc/nginx/nginx.conf \
+ && grep -q '^worker_processes 4;' /etc/nginx/nginx.conf
+
 # Generate a self-signed cert for nginx. We use selenium+chromium to run
 # Functional javascript tests and it forces all requests to use https now.
 # We have a nginx config with a self-signed cert to proxy https requests
