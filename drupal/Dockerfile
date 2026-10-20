@@ -207,6 +207,10 @@ ENV SIMPLETEST_DB="mysql://${DRUPAL_DB_USER}:${DRUPAL_DB_PASS}@${DRUPAL_DB_HOST}
  DRUSH_ALLOW_XDEBUG=1 \
  TESTSUITE=local
 
+# Local development does not need one nginx worker per CPU core.
+# @see openshift/files/entrypoints/99-nginx.sh
+ENV NGINX_WORKER_PROCESSES=4
+
 RUN apk add --no-cache \
   --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
   github-cli \
