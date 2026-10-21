@@ -24,6 +24,8 @@ ENV COMPOSER_CACHE_DIR=/tmp
 
 WORKDIR $PROJECT_DIR
 
+RUN echo 'session.upload_progress.enabled=Off' > /etc/php85/conf.d/php-overrides.ini
+
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
 RUN \
   # Make sure composer cache directory is writable.
