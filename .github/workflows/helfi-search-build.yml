@@ -1,0 +1,43 @@
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: The environment
+        options:
+          - dev
+          - prod
+name: Build helfi-search images
+jobs:
+  build-images:
+    name: Build helfi-search images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
+      - name: Run tests
+        working-directory: helfi-search
+        run: make test
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push latest images
+        working-directory: helfi-search
+        if: github.event.inputs.environment == 'prod'
+        run: make push-prod
+
+      - name: Build and push dev images
+        working-directory: helfi-search
+        if: github.event.inputs.environment == 'dev'
+        run: make push-dev
+
