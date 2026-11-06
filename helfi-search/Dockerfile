@@ -56,7 +56,9 @@ CMD []
 FROM docker.elastic.co/integrations/crawler:latest AS elasticsearch-crawler
 
 USER root
-RUN apk add --no-cache php-8.5 php-8.5-pcntl php-8.5-ctype php-8.5-mbstring php-8.5-curl tini \
+# dom and xml: the worker parses the crawled pages' HTML.
+RUN apk add --no-cache php-8.5 php-8.5-pcntl php-8.5-ctype php-8.5-mbstring php-8.5-curl \
+    php-8.5-dom php-8.5-xml tini \
     # The crawler saves rejected bulk requests in output/failed_payloads,
     # relative to its directory. The image's java user owns /home/app, so a
     # random UID couldn't create it.
@@ -91,8 +93,7 @@ FROM elasticsearch-crawler AS test-elasticsearch-crawler
 USER 0
 # Only for the tests: what PHPUnit and Composer need, and Composer outside
 # PATH as above.
-RUN apk add --no-cache php-8.5-phar php-8.5-openssl php-8.5-dom php-8.5-xml \
-    php-8.5-xmlwriter php-8.5-iconv
+RUN apk add --no-cache php-8.5-phar php-8.5-openssl php-8.5-xmlwriter php-8.5-iconv
 COPY --from=composer:2 /usr/bin/composer /opt/test/composer
 COPY tests/ /tests
 WORKDIR /tests

@@ -28,6 +28,9 @@ class ImageTest extends TestCase {
       ['ctype'],
       ['mbstring'],
       ['curl'],
+      // Parsing the crawled pages.
+      ['dom'],
+      ['xml'],
     ];
   }
 
