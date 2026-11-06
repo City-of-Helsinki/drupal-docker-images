@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class ImageTest extends TestCase {
 
   public function testPhpVersion() : void {
-    $this->assertSame('8.4', PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION);
+    $this->assertSame('8.5', PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION);
   }
 
   #[DataProvider(methodName: 'extensionData')]

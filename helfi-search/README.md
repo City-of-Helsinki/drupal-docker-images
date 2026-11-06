@@ -13,7 +13,7 @@ Tags:
 - `latest`: used by the project's OpenShift images.
 - `dev`: used for local development, and for testing changes before release.
 
-Both use PHP 8.4 and run as a non-root user, as OpenShift requires. See the
+Both use PHP 8.5 and run as a non-root user, as OpenShift requires. See the
 [Dockerfile](Dockerfile) for details.
 
 ## Development
@@ -56,7 +56,7 @@ Always build the `dev` images first, and build the `latest` images only after
 ## Upstream images
 
 The images always use the latest upstream versions: FrankenPHP
-(`dunglas/frankenphp:php8.4-alpine`) and Elastic Open Crawler
+(`dunglas/frankenphp:php8.5-alpine`) and Elastic Open Crawler
 (`docker.elastic.co/integrations/crawler:latest`). Every build picks up new
 releases, so check the crawler's
 [changelog](https://github.com/elastic/crawler/blob/main/docs/CHANGELOG.md)

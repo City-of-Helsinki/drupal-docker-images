@@ -3,16 +3,16 @@
 # on the dev tags (docker/local/Dockerfile).
 #
 # Both run as any non-root UID, as OpenShift's restricted SCC requires (a
-# random UID in group 0), with no capabilities. PHP 8.4.
+# random UID in group 0), with no capabilities. PHP 8.5.
 #
 # The upstream images aren't pinned: every build uses the latest FrankenPHP
-# (with PHP 8.4) and the latest Elastic Open Crawler. Changes are tested
+# (with PHP 8.5) and the latest Elastic Open Crawler. Changes are tested
 # through the dev tags before they're released as latest.
 
 
 # helfi-search-webhook: FrankenPHP (PHP inside the Caddy web server). Every
 # request goes to the front controller, /app/public/index.php.
-FROM dunglas/frankenphp:php8.4-alpine AS webhook
+FROM dunglas/frankenphp:php8.5-alpine AS webhook
 
 # The image has no php.ini, and PHP's built-in defaults display errors to the
 # client, don't log them, and answer a fatal error with HTTP 200. Use PHP's
@@ -56,7 +56,7 @@ CMD []
 FROM docker.elastic.co/integrations/crawler:latest AS elasticsearch-crawler
 
 USER root
-RUN apk add --no-cache php-8.4 php-8.4-pcntl php-8.4-ctype php-8.4-mbstring php-8.4-curl tini \
+RUN apk add --no-cache php-8.5 php-8.5-pcntl php-8.5-ctype php-8.5-mbstring php-8.5-curl tini \
     # The crawler saves rejected bulk requests in output/failed_payloads,
     # relative to its directory. The image's java user owns /home/app, so a
     # random UID couldn't create it.
@@ -91,8 +91,8 @@ FROM elasticsearch-crawler AS test-elasticsearch-crawler
 USER 0
 # Only for the tests: what PHPUnit and Composer need, and Composer outside
 # PATH as above.
-RUN apk add --no-cache php-8.4-phar php-8.4-openssl php-8.4-dom php-8.4-xml \
-    php-8.4-xmlwriter php-8.4-iconv
+RUN apk add --no-cache php-8.5-phar php-8.5-openssl php-8.5-dom php-8.5-xml \
+    php-8.5-xmlwriter php-8.5-iconv
 COPY --from=composer:2 /usr/bin/composer /opt/test/composer
 COPY tests/ /tests
 WORKDIR /tests
