@@ -1,0 +1,30 @@
+# FrankenPHP configuration for the helfi-search webhook, a single front
+# controller (/app/public/index.php).
+# https://frankenphp.dev/docs/config
+
+{
+	# TLS is terminated in front of the container (the OpenShift Route, or
+	# Traefik/Stonehenge locally), so serve plain HTTP and don't manage
+	# certificates.
+	auto_https off
+	skip_install_trust
+	# Caddy's admin API isn't needed.
+	admin off
+
+	# Extra FrankenPHP settings from the environment, e.g.
+	# FRANKENPHP_CONFIG="num_threads 4". Empty by default: FrankenPHP's own
+	# defaults (two PHP threads per CPU).
+	frankenphp {
+		{$FRANKENPHP_CONFIG}
+	}
+}
+
+# Port 8080: a non-root user can't bind to ports below 1024.
+:8080 {
+	root * /app/public
+
+	# Send every request to the front controller, whatever the path, and never
+	# serve files directly.
+	rewrite * /index.php
+	php
+}

@@ -30,6 +30,14 @@ Available PHP versions: `8.3`, `8.4`:
 - `ghcr.io/city-of-helsinki/drupal-web:8.4`
 - `ghcr.io/city-of-helsinki/drupal-web:8.3`
 
+## Hel.fi search images
+
+Images for [City-of-Helsinki/helfi-search](https://github.com/City-of-Helsinki/helfi-search).
+See [helfi-search/README.md](helfi-search).
+
+- `ghcr.io/city-of-helsinki/helfi-search-webhook:latest` / `:dev`
+- `ghcr.io/city-of-helsinki/helfi-search-elasticsearch-crawler:latest` / `:dev`
+
 ## OpenShift Drupal repository image
 
 Docker image used to run [City-of-Helsinki/drupal-repository](https://github.com/City-of-Helsinki/drupal-repository).
