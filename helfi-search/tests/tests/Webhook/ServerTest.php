@@ -19,7 +19,6 @@ class ServerTest extends TestCase {
     header('Content-Type: application/json');
     echo json_encode([
       'uri' => $_SERVER['REQUEST_URI'],
-      'umask' => sprintf('%04o', umask()),
     ]);
     PHP;
 
@@ -37,7 +36,7 @@ class ServerTest extends TestCase {
     // (platforms other than the build machine's), PHP can't create a timer
     // for each of FrankenPHP's default two threads per CPU.
     self::$server = proc_open(
-      ['/bin/sh', '-c', 'umask 0002 && exec frankenphp run --config /etc/frankenphp/Caddyfile --adapter caddyfile'],
+      ['frankenphp', 'run', '--config', '/etc/frankenphp/Caddyfile', '--adapter', 'caddyfile'],
       [0 => ['file', '/dev/null', 'r'], 1 => ['file', '/tmp/server.log', 'a'], 2 => ['file', '/tmp/server.log', 'a']],
       $pipes,
       NULL,
@@ -78,11 +77,6 @@ class ServerTest extends TestCase {
       $this->assertSame(200, $status, $path);
       $this->assertSame($path, json_decode($body, TRUE)['uri'] ?? NULL, "$path reaches index.php with its original URI");
     }
-  }
-
-  public function testUmask() : void {
-    [, $body] = $this->get('/');
-    $this->assertSame('0002', json_decode($body, TRUE)['umask']);
   }
 
   public function testFatalErrorGivesServerError() : void {
