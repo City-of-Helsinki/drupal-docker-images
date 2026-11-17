@@ -42,12 +42,8 @@ EXPOSE 8080
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
     CMD curl -fsS -o /dev/null http://localhost:8080/health || exit 1
 
-# umask 0002: the webhook and the worker run as different UIDs in group 0 and
-# share the queue folder, so whatever the webhook creates there must be
-# group-writable. Set for the whole process here, because PHP's umask() isn't
-# safe in FrankenPHP's threads. exec keeps FrankenPHP as PID 1, so it gets
-# SIGTERM and stops gracefully.
-ENTRYPOINT ["/bin/sh", "-c", "umask 0002 && exec frankenphp run --config /etc/frankenphp/Caddyfile --adapter caddyfile"]
+# FrankenPHP runs as PID 1, so it gets SIGTERM and stops gracefully.
+ENTRYPOINT ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
 CMD []
 
 
