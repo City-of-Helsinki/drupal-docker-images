@@ -1,4 +1,4 @@
-FROM alpine:3.24
+FROM alpine:3.24 AS drupal-repository
 
 COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
 EXPOSE 9000
@@ -44,3 +44,13 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 # Default command: Start up multiple services via entrypoint
 CMD ["entrypoint"]
+
+
+FROM drupal-repository AS test
+
+# Only for the tests: what PHPUnit needs on top of the image.
+RUN apk add --no-cache php85-dom php85-xml php85-xmlwriter php85-tokenizer php85-ctype
+COPY tests/ /tests
+WORKDIR /tests
+RUN composer install --no-interaction --no-progress && \
+  vendor/bin/phpunit
