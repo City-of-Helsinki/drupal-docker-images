@@ -4,6 +4,7 @@ This image is used to run [City-of-Helsinki/drupal-repository](https://github.co
 
 ## Development
 
-Build the image: `make test`.
+Run the tests: `make test`. The tests are PHPUnit tests in [tests](tests),
+run inside the Dockerfile's `test` stage for every platform.
 
-Push the image: `make push`.
+Test and push the image: `make push` (`make push TAG=dev` for another tag).
