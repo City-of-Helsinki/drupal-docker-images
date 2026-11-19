@@ -166,6 +166,8 @@ RUN { \
   echo 'session.upload_progress.enabled=Off'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
+COPY openshift/php/conf.d/ /etc/php${PHP_SHORT_VERSION}/conf.d/
+
 # Enable and set igbinary as default apc serializer.
 RUN { \
   echo 'extension=igbinary'; \

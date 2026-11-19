@@ -47,6 +47,16 @@ abstract class PhpTestBase extends TestBase {
     $this->assertFalse(filter_var(ini_get('session.upload_progress.enabled'), FILTER_VALIDATE_BOOLEAN));
   }
 
+  public function testFatalErrorBacktraceMitigations() : void {
+    // https://github.com/php/php-src/security/advisories/GHSA-2fjv-p558-g82m
+    // https://github.com/php/php-src/security/advisories/GHSA-8mjj-2r7p-4hg2
+    $this->assertSame('1', ini_get('zend.exception_ignore_args'));
+    // fatal_error_backtraces was added in PHP 8.5.
+    if (PHP_VERSION_ID >= 80500) {
+      $this->assertContains(ini_get('fatal_error_backtraces'), ['', '0', 'Off']);
+    }
+  }
+
   public function testPhpVersion() {
     $actual = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
     $this->assertTrue(version_compare(static::$phpVersion, $actual, 'eq'));
