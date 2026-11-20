@@ -47,6 +47,10 @@ abstract class PhpTestBase extends TestBase {
     $this->assertFalse(filter_var(ini_get('session.upload_progress.enabled'), FILTER_VALIDATE_BOOLEAN));
   }
 
+  public function testExposePhpDisabled() : void {
+    $this->assertFalse(filter_var(ini_get('expose_php'), FILTER_VALIDATE_BOOLEAN));
+  }
+
   public function testPhpVersion() {
     $actual = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
     $this->assertTrue(version_compare(static::$phpVersion, $actual, 'eq'));

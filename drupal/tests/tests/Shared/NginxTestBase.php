@@ -48,4 +48,13 @@ abstract class NginxTestBase extends TestBase {
     $this->assertEquals(0, $returnCode, implode("\n", $output));
   }
 
+  public function testFastcgiKeepConnDisabled() : void {
+    exec(sprintf('nginx -T -g %s 2>&1', escapeshellarg($this->getNginxGlobalDirectives())), $output, $returnCode);
+    $this->assertEquals(0, $returnCode, implode("\n", $output));
+
+    $config = implode("\n", $output);
+    $this->assertMatchesRegularExpression('/^\s*fastcgi_keep_conn\s+off;/m', $config);
+    $this->assertDoesNotMatchRegularExpression('/^\s*fastcgi_keep_conn\s+on;/m', $config);
+  }
+
 }
