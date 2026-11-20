@@ -164,6 +164,7 @@ RUN { \
   echo 'realpath_cache_size=8M'; \
   echo 'apc.shm_size=64M'; \
   echo 'session.upload_progress.enabled=Off'; \
+  echo 'expose_php=Off'; \
 } > /etc/php${PHP_SHORT_VERSION}/conf.d/php-overrides.ini
 
 # Enable and set igbinary as default apc serializer.

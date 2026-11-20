@@ -40,6 +40,8 @@ target "php" {
 target "test" {
   output = ["type=cacheonly"]
   target = "test"
+  # Always run the tests, even when the image layers come from the cache.
+  no-cache-filter = ["test"]
 }
 
 target "php84-common" {

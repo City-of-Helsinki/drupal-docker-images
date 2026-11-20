@@ -36,13 +36,13 @@ test: builder
 
 # The latest tags, used by the project's OpenShift images.
 PHONY += push-prod
-push-prod: test
+push-prod: build-prod test
 	$(call build_image,prod)
 
 # The dev tags, used for local development and for testing changes before a
 # production release.
 PHONY += push-dev
-push-dev: test
+push-dev: build-dev test
 	$(call build_image,dev)
 
 # Build the dev images into the local Docker, for trying changes in the project
@@ -56,12 +56,15 @@ PHONY += load
 load:
 	docker buildx bake --builder default --set '*.platform=$(PLATFORM)' dev
 
+build-%: builder
+	docker buildx bake --builder $(BUILDER) --no-cache --pull --set '*.output=type=cacheonly' $*
+
 define run_tests
 	docker buildx bake --builder $(BUILDER) $(1)
 endef
 
 define build_image
-	docker buildx bake --builder $(BUILDER) --no-cache --pull --push $(1)
+	docker buildx bake --builder $(BUILDER) --push $(1)
 endef
 
 .PHONY: $(PHONY)
