@@ -120,8 +120,12 @@ PHONY += push-php84-web
 push-php84-web: test-php84-web
 	$(call build_image,web-php84)
 
+# Pushing runs the tests without the build cache, so that they check the
+# packages that will be pushed, and the PHP security release check runs again.
+push-%: TEST_FLAGS = --no-cache --pull
+
 define run_tests
-	docker buildx bake $(1)
+	docker buildx bake $(TEST_FLAGS) $(1)
 endef
 
 define build_image

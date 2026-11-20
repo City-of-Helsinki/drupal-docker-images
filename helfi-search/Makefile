@@ -56,8 +56,12 @@ PHONY += load
 load:
 	docker buildx bake --builder default --set '*.platform=$(PLATFORM)' dev
 
+# Pushing runs the tests without the build cache, so that they check the
+# packages that will be pushed, and the PHP security release check runs again.
+push-%: TEST_FLAGS = --no-cache --pull
+
 define run_tests
-	docker buildx bake --builder $(BUILDER) $(1)
+	docker buildx bake --builder $(BUILDER) $(TEST_FLAGS) $(1)
 endef
 
 define build_image
