@@ -13,10 +13,7 @@ FROM alpine:3.24 AS drupal-repository
 COPY --from=webhook /webhook /usr/local/bin/webhook
 EXPOSE 9000
 
-# We need php and git to build satis. The upgrade picks up security fixes the
-# base image doesn't have yet. PHP comes from edge, which gets PHP's security
-# releases days before 3.24.
-# TODO: Remove edge once 3.24 has PHP 8.5.13 or newer.
+# We need php and git to build satis.
 RUN apk upgrade --no-cache && \
   apk add --no-cache git \
   make \
