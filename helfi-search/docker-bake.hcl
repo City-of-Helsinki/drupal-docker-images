@@ -49,6 +49,8 @@ target "test-webhook" {
   inherits = ["common"]
   target = "test-webhook"
   output = ["type=cacheonly"]
+  # Always run the tests, even when the image layers come from the cache.
+  no-cache-filter = ["test-webhook"]
 }
 
 # helfi-search-elasticsearch-crawler
@@ -67,4 +69,6 @@ target "test-elasticsearch-crawler" {
   inherits = ["common"]
   target = "test-elasticsearch-crawler"
   output = ["type=cacheonly"]
+  # Always run the tests, even when the image layers come from the cache.
+  no-cache-filter = ["test-elasticsearch-crawler"]
 }

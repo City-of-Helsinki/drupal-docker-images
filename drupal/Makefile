@@ -52,7 +52,7 @@ test-php85-dev:
 	$(call run_tests,test-php85)
 
 PHONY += push-php85-dev
-push-php85-dev: test-php85-dev
+push-php85-dev: build-php85-dev test-php85-dev
 	$(call build_image,php85-dev)
 
 PHONY += test-php85-web-dev
@@ -60,7 +60,7 @@ test-php85-web-dev:
 	$(call run_tests,drupal-web-test-php85)
 
 PHONY += push-php85-web-dev
-push-php85-web-dev: test-php85-web-dev
+push-php85-web-dev: build-web-php85-dev test-php85-web-dev
 	$(call build_image,web-php85-dev)
 
 #######
@@ -71,7 +71,7 @@ test-php85:
 	$(call run_tests,test-php85)
 
 PHONY += push-php85
-push-php85: test-php85
+push-php85: build-php85 test-php85
 	$(call build_image,php85)
 
 PHONY += test-php85-web
@@ -79,7 +79,7 @@ test-php85-web:
 	$(call run_tests,drupal-web-test-php85)
 
 PHONY += push-php85-web
-push-php85-web: test-php85-web
+push-php85-web: build-web-php85 test-php85-web
 	$(call build_image,web-php85)
 
 ###########
@@ -90,7 +90,7 @@ test-php84-dev:
 	$(call run_tests,test-php84)
 
 PHONY += push-php84-dev
-push-php84-dev: test-php84-dev
+push-php84-dev: build-php84-dev test-php84-dev
 	$(call build_image,php84-dev)
 
 PHONY += test-php84-web-dev
@@ -98,7 +98,7 @@ test-php84-web-dev:
 	$(call run_tests,drupal-web-test-php84)
 
 PHONY += push-php84-web-dev
-push-php84-web-dev: test-php84-web-dev
+push-php84-web-dev: build-web-php84-dev test-php84-web-dev
 	$(call build_image,web-php84-dev)
 
 #######
@@ -109,7 +109,7 @@ test-php84:
 	$(call run_tests,test-php84)
 
 PHONY += push-php84
-push-php84: test-php84
+push-php84: build-php84 test-php84
 	$(call build_image,php84)
 
 PHONY += test-php84-web
@@ -117,19 +117,18 @@ test-php84-web:
 	$(call run_tests,drupal-web-test-php84)
 
 PHONY += push-php84-web
-push-php84-web: test-php84-web
+push-php84-web: build-web-php84 test-php84-web
 	$(call build_image,web-php84)
 
-# Pushing runs the tests without the build cache, so that they check the
-# packages that will be pushed, and the PHP security release check runs again.
-push-%: TEST_FLAGS = --no-cache --pull
+build-%:
+	docker buildx bake --no-cache --pull --set '*.output=type=cacheonly' $*
 
 define run_tests
-	docker buildx bake $(TEST_FLAGS) $(1)
+	docker buildx bake $(1)
 endef
 
 define build_image
-	docker buildx bake --no-cache --pull --push $(1)
+	docker buildx bake --push $(1)
 endef
 
 .PHONY: $(PHONY)
