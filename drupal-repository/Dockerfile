@@ -1,12 +1,24 @@
+# The webhook, built from source with the latest Go. Prebuilt images, such as
+# almir/webhook, are rebuilt rarely and carry the Go version they were built
+# with, along with its vulnerabilities.
+FROM --platform=$BUILDPLATFORM golang:alpine AS webhook
+ARG TARGETOS TARGETARCH
+ADD https://github.com/adnanh/webhook.git#2.8.3 /src
+WORKDIR /src
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /webhook
+
+
 FROM alpine:3.24 AS drupal-repository
 
-COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
+COPY --from=webhook /webhook /usr/local/bin/webhook
 EXPOSE 9000
 
 # We need php and git to build satis.
-RUN apk add --no-cache git \
+RUN apk upgrade --no-cache && \
+  apk add --no-cache git \
   make \
-  tini \
+  tini && \
+  apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
   php85 \
   php85-openssl \
   php85-common \
@@ -49,7 +61,8 @@ CMD ["entrypoint"]
 FROM drupal-repository AS test
 
 # Only for the tests: what PHPUnit needs on top of the image.
-RUN apk add --no-cache php85-dom php85-xml php85-xmlwriter php85-tokenizer php85-ctype
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+  php85-dom php85-xml php85-xmlwriter php85-tokenizer php85-ctype
 COPY tests/ /tests
 WORKDIR /tests
 RUN composer install --no-interaction --no-progress && \

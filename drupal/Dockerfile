@@ -26,7 +26,7 @@ RUN set -eux; \
     tini
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
-COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
+COPY --from=amazeeio/envplate:26.11.0 /usr/local/bin/ep /usr/local/bin/ep
 
 ENV AZURE_SQL_SSL_CA_PATH=/etc/ssl/certs/ca-certificates.crt
 
@@ -75,7 +75,7 @@ FROM base AS php85
 
 ENV PHP_VERSION=8.5 PHP_INSTALL_VERSION=85
 RUN set -eux; \
-    apk --no-cache add \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
     php85-pear \
     php85-fpm \
     php85-curl \

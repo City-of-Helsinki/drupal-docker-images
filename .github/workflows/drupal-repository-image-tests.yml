@@ -10,6 +10,9 @@ on:
       - '!**.md'
       - 'drupal-repository/**'
       - '.github/workflows/drupal-repository-image-tests.yml'
+  # Weekly, to catch new vulnerabilities and upstream changes.
+  schedule:
+    - cron: '0 5 * * 1'
 name: Drupal repository image tests
 jobs:
   tests:
@@ -30,3 +33,25 @@ jobs:
       - name: Run tests
         working-directory: drupal-repository
         run: make test
+
+  scan:
+    name: Scan drupal-repository for vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Build image
+        working-directory: drupal-repository
+        run: docker buildx build --load --platform linux/amd64 --target drupal-repository -t scan:drupal-repository ./
+
+      - name: Scan for vulnerabilities
+        uses: anchore/scan-action@8576240a41341d866dbd7ebc72cd9fc0ef023f54 # v7.4.2
+        with:
+          image: scan:drupal-repository
+          # Fail on high and critical vulnerabilities that have a fix.
+          severity-cutoff: high
+          only-fixed: true
+          output-format: table
