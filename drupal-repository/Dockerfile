@@ -14,11 +14,14 @@ COPY --from=webhook /webhook /usr/local/bin/webhook
 EXPOSE 9000
 
 # We need php and git to build satis. The upgrade picks up security fixes the
-# base image doesn't have yet.
+# base image doesn't have yet. PHP comes from edge, which gets PHP's security
+# releases days before 3.24.
+# TODO: Remove edge once 3.24 has PHP 8.5.13 or newer.
 RUN apk upgrade --no-cache && \
   apk add --no-cache git \
   make \
-  tini \
+  tini && \
+  apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
   php85 \
   php85-openssl \
   php85-common \
@@ -61,7 +64,8 @@ CMD ["entrypoint"]
 FROM drupal-repository AS test
 
 # Only for the tests: what PHPUnit needs on top of the image.
-RUN apk add --no-cache php85-dom php85-xml php85-xmlwriter php85-tokenizer php85-ctype
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+  php85-dom php85-xml php85-xmlwriter php85-tokenizer php85-ctype
 COPY tests/ /tests
 WORKDIR /tests
 RUN composer install --no-interaction --no-progress && \

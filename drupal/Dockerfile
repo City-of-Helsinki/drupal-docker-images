@@ -74,8 +74,10 @@ CMD ["entrypoint"]
 FROM base AS php85
 
 ENV PHP_VERSION=8.5 PHP_INSTALL_VERSION=85
+# PHP comes from edge, which gets PHP's security releases days before 3.24.
+# TODO: Remove edge once 3.24 has PHP 8.5.13 or newer.
 RUN set -eux; \
-    apk --no-cache add \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
     php85-pear \
     php85-fpm \
     php85-curl \
