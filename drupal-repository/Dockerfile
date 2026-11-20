@@ -1,10 +1,22 @@
+# The webhook, built from source with the latest Go. Prebuilt images, such as
+# almir/webhook, are rebuilt rarely and carry the Go version they were built
+# with, along with its vulnerabilities.
+FROM --platform=$BUILDPLATFORM golang:alpine AS webhook
+ARG TARGETOS TARGETARCH
+ADD https://github.com/adnanh/webhook.git#2.8.3 /src
+WORKDIR /src
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /webhook
+
+
 FROM alpine:3.24 AS drupal-repository
 
-COPY --from=almir/webhook /usr/local/bin/webhook /usr/local/bin/webhook
+COPY --from=webhook /webhook /usr/local/bin/webhook
 EXPOSE 9000
 
-# We need php and git to build satis.
-RUN apk add --no-cache git \
+# We need php and git to build satis. The upgrade picks up security fixes the
+# base image doesn't have yet.
+RUN apk upgrade --no-cache && \
+  apk add --no-cache git \
   make \
   tini \
   php85 \

@@ -26,7 +26,7 @@ RUN set -eux; \
     tini
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/
-COPY --from=amazeeio/envplate:v1.0.3 /usr/local/bin/ep /usr/local/bin/ep
+COPY --from=amazeeio/envplate:26.11.0 /usr/local/bin/ep /usr/local/bin/ep
 
 ENV AZURE_SQL_SSL_CA_PATH=/etc/ssl/certs/ca-certificates.crt
 

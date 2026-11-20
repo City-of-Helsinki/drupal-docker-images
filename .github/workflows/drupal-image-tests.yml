@@ -30,3 +30,31 @@ jobs:
       - name: Run tests
         working-directory: drupal
         run: make test
+
+  scan:
+    name: Scan ${{ matrix.target }} for vulnerabilities
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [php85, php84, web-php85, web-php84]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Build image
+        working-directory: drupal
+        run: docker buildx bake --load --set "$TARGET.platform=linux/amd64" --set "$TARGET.tags=scan:$TARGET" "$TARGET"
+        env:
+          TARGET: ${{ matrix.target }}
+
+      - name: Scan for vulnerabilities
+        uses: anchore/scan-action@8576240a41341d866dbd7ebc72cd9fc0ef023f54 # v7.4.2
+        with:
+          image: scan:${{ matrix.target }}
+          # Fail on high and critical vulnerabilities that have a fix.
+          severity-cutoff: high
+          only-fixed: true
+          output-format: table
