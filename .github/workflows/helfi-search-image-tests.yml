@@ -10,6 +10,9 @@ on:
       - '!**.md'
       - 'helfi-search/**'
       - '.github/workflows/helfi-search-image-tests.yml'
+  # Weekly, to catch new vulnerabilities and upstream changes.
+  schedule:
+    - cron: '0 5 * * 1'
 name: Helfi search image tests
 jobs:
   tests:
